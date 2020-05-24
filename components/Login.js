@@ -17,6 +17,10 @@ class Login extends Component {
 		})
 	}
 
+	register = () => {
+		this.props.navigation.navigate('Register')
+	}
+
 	handleLogin = () => {
 		alert(this.state.username);
 	}
@@ -31,9 +35,9 @@ class Login extends Component {
 					<TextInput style={styles.input} placeholder="Enter username" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
 					<TextInput style={styles.input} placeholder="Enter password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
 					<TouchableOpacity style={styles.btn} onPress={this.handleLogin}>
-						<Text style={styles.btnText}>Submit</Text>
+						<Text style={styles.btnText}>Login</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.register} onPress={() => <Register />}>
+					<TouchableOpacity style={styles.register} onPress={() => this.register()}>
 						<Text style={styles.registerText}>Don't have an account? Register</Text>
 					</TouchableOpacity>
 				</View>
