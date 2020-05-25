@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, ImageBackground } from 'react-native';
-//import Menu from "./components/Menu";
+import store from "./store";
+import { Provider } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Home from "./components/Home";
 
 const image = '../SoccerStatz/assets/soccerstazbg.png';
 
@@ -13,6 +15,11 @@ const StackNavigatorConfig = {
 };
 
 const StackConfig = {
+	Home: {
+		name: "Home",
+		component: Home,
+		options: { headerShown: false }
+	},
 	Login: {
 		name: "Login",
 		component: Login,
@@ -30,16 +37,19 @@ const MainNav = () => (
 	<Stack.Navigator {...StackNavigatorConfig}>
 		<Stack.Screen {...StackConfig["Login"]} />
 		<Stack.Screen {...StackConfig["Register"]} />
+		<Stack.Screen {...StackConfig["Home"]} />
 	</Stack.Navigator>
 );
 
 export default function App() {
 	return (
-		<View style={styles.container}>
-			<NavigationContainer>
-				<MainNav />
-			</NavigationContainer>
-		</View>
+		<Provider store={store}>
+			<View style={styles.container}>
+				<NavigationContainer>
+					<MainNav />
+				</NavigationContainer>
+			</View>
+		</Provider>
 	);
 }
 

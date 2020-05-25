@@ -2,12 +2,17 @@ import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from "react-native"
 import { white, orange, green, black, gray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { saveCard } from "../utils/api";
+import { saveUser, getUser } from "../utils/api";
+import { RandomGeneratedNumber } from "../utils/helpers";
+import { addUser } from "../actions/register";
+import { connect } from "react-redux";
+import { Base64 } from 'js-base64';
 
 class Register extends Component {
 	state = {
 		username: '',
 		password: '',
+		cpassword: '',
 	}
 
 	setLoginData = (input, name) => {
@@ -17,24 +22,47 @@ class Register extends Component {
 	}
 
 	loginPage = () => {
-		this.props.navigation.navigate('Login')
+		this.props.navigation.navigate('Login');
 	}
 
-	handleLogin = () => {
-		alert(this.state.username);
+	handleRegister = () => {
+		const { username, password, cpassword } = this.state;
+		const { dispatch } = this.props;
+
+		if (username.length > 0 && password.length > 0) {
+			if (password !== cpassword) alert('👎 password does not match');
+			else {
+				const user = {
+					id: RandomGeneratedNumber(),
+					name: this.state.username,
+					password: Base64.encode(this.state.password.toLocaleLowerCase()),
+				}
+				saveUser(user).then(data => {
+					if (data) {
+						dispatch(addUser(user.id, user.name, user.password));
+						alert('👍account successfully created');
+						this.props.navigation.navigate('Login');
+					}
+					else {
+						alert('👎error!! username name already exist');
+					}
+				});
+			}
+		}
+		else alert('😏 username and password are compulsory');
 	}
 
 
 	render() {
-		const { username, password } = this.state;
+		const { username, password, cpassword } = this.state;
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
 					<Text style={styles.titletext}>SoccerStatz <FontAwesome name='soccer-ball-o' size={30} color={gray} /></Text>
 					<TextInput style={styles.input} placeholder="Enter username" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
 					<TextInput style={styles.input} placeholder="Enter password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
-					<TextInput style={styles.input} placeholder="Confirm password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
-					<TouchableOpacity style={styles.btn} onPress={this.handleLogin}>
+					<TextInput style={styles.input} placeholder="Confirm password" value={cpassword} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "cpassword")} />
+					<TouchableOpacity style={styles.btn} onPress={this.handleRegister}>
 						<Text style={styles.btnText}>Register</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.register} onPress={() => this.loginPage()}>
@@ -104,4 +132,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default Register;
+export default connect()(Register);

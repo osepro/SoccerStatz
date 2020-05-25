@@ -1,16 +1,11 @@
 import { LOGIN } from "../constants";
-import { retrieveDecks } from "../utils/api";
 
-export function login() {
+export function login(username) {
 	return (dispatch) => {
-		return retrieveDecks()
-			.then((decks) => {
-				dispatch(
-					{
-						type: LOGIN,
-						login
-					}
-				)
+		dispatch(
+			{
+				type: LOGIN,
+				username
 			})
 	}
 };
