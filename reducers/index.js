@@ -1,14 +1,9 @@
-import { LOGIN } from "../constants";
+import { combineReducers } from "redux";
+import members from "./members";
+import login from "./login"
 
-function statzactivities(state = {}, action) {
-	switch (action.type) {
-		case LOGIN:
-			return {
-				...state,
-				...action.decks
-			}
-		default:
-			return state
-	}
-}
-export default statzactivities;
+
+export default combineReducers({
+	members,
+	login
+});

@@ -2,8 +2,8 @@ import { AsyncStorage } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 
-export const FLASHCARD_STORAGE_KEY = "Udacity:MobileFlashCards";
-const NOTIFICATION_KEY = "MobileFlash:notifications";
+export const SOCCERSTAZ_STORAGE_KEY = "Soccer:MobileStaz";
+const NOTIFICATION_KEY = "SoccerStaz:notifications";
 
 export function RandomGeneratedNumber() {
 	return (

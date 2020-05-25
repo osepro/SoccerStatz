@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from "react-native"
-import Register from "./Register";
 import { white, orange, green, black, gray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { saveCard } from "../utils/api";
+import { Base64 } from 'js-base64';
+import { getUser } from "../utils/api";
+import { connect } from "react-redux";
+import { login } from "../actions/login";
 
 class Login extends Component {
 	state = {
@@ -22,7 +24,18 @@ class Login extends Component {
 	}
 
 	handleLogin = () => {
-		alert(this.state.username);
+		const { username, password } = this.state;
+		const { dispatch } = this.props;
+		const encryptPassword = Base64.encode(password);
+		getUser(username, encryptPassword).then(data => {
+			if (data) {
+				dispatch(login(username));
+				this.props.navigation.navigate('Home')
+			}
+			else {
+				alert('😞! error invalid username/password');
+			}
+		});
 	}
 
 
@@ -104,4 +117,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default Login;
+export default connect()(Login);
