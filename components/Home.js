@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar, ImageBackground } from "react-native"
 import { connect } from "react-redux";
-import { white, orange, green, black, gray, blue } from "../utils/colors";
+import { white, orange, lightgray, green, black, gray, blue, red } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,9 +13,12 @@ function HomeScreen({ navigation }) {
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
 			<View style={styles.statusBar}>
 				<StatusBar barStyle="light-content" />
-				<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-					<FontAwesome name='navicon' size={30} color={black} />
-				</TouchableOpacity>
+				<View style={styles.homeContainer}>
+					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+						<FontAwesome name='navicon' size={30} color={gray} />
+					</TouchableOpacity>
+				</View>
+				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
 			</View>
 			<View style={styles.row}>
 				<View style={styles.imageHolder}>
@@ -37,7 +40,6 @@ function HomeScreen({ navigation }) {
 function NotificationsScreen({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<FontAwesome name='plus-square' size={30} color={gray} />
 			<Button onPress={() => navigation.goBack()} title="Go back home" />
 		</View>
 	);
@@ -81,11 +83,11 @@ const Drawer = createDrawerNavigator();
 function MyDrawer() {
 	return (
 		<Drawer.Navigator initialRouteName="Home">
-			<Drawer.Screen name="Home" component={HomeScreen} />
-			<Drawer.Screen name="Add Player" component={addPlayer} />
-			<Drawer.Screen name="View Player" component={viewPlayer} />
-			<Drawer.Screen name="Delete Player" component={deletePlayer} />
-			<Drawer.Screen name="LogOut" component={logOut} />
+			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} />
+			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
+			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
+			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
+			<Drawer.Screen name="LogOut" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'sign-out' : 'sign-out'} size={20} color={red} /> }} />
 		</Drawer.Navigator>
 	);
 }
@@ -96,6 +98,26 @@ class Home extends Component {
 		username: '',
 		password: '',
 	}
+
+	renderItem = ({ today, ...metrics }, formattedDate, key) => (
+		<View style={styles.item}>
+			{today ? (
+				<View>
+					<DateHeader date={formattedDate} />
+					<Text style={styles.noDataText}>{today}</Text>
+				</View>
+			) : (
+					<TouchableOpacity
+						onPress={() =>
+							this.props.navigation.navigate("EntryDetail", { entryId: key })
+						}
+					>
+						<Text> Details </Text>
+					</TouchableOpacity>
+				)}
+		</View>
+	);
+
 
 	render() {
 		const { login } = this.props;
@@ -117,15 +139,18 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	statusBar: {
-		backgroundColor: green,
-		height: 120,
-		justifyContent: "center",
-		paddingLeft: 10,
+		flexDirection: "row",
+		backgroundColor: white,
+		paddingLeft: 20,
+		borderBottomColor: lightgray,
+		borderBottomWidth: 1,
+		paddingTop: 40,
+		paddingBottom: 20,
 	},
 	row: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
 	},
 	titletext: {
 		fontSize: 35,
@@ -133,6 +158,18 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		color: orange
 	},
+	homeContainer: {
+		flexWrap: "wrap",
+		justifyContent: "flex-start",
+		width: '10%'
+	},
+	homeTitle: {
+		fontSize: 25,
+		color: orange,
+		textAlign: "center",
+		width: '70%'
+	},
+
 	register: {
 		alignItems: "center"
 	},
@@ -143,35 +180,6 @@ const styles = StyleSheet.create({
 	fillbelow: {
 		color: "#FF0000",
 		fontSize: 12
-	},
-	input: {
-		height: 44,
-		padding: 8,
-		borderWidth: 1,
-		borderColor: "#757575",
-		marginTop: 20,
-		justifyContent: "center",
-		borderRadius: 5
-	},
-	btnView: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 20
-	},
-	btn: {
-		backgroundColor: gray,
-		padding: 15,
-		paddingLeft: 80,
-		paddingRight: 80,
-		borderRadius: 5,
-		marginTop: 20,
-		marginBottom: 30,
-	},
-	btnText: {
-		color: "#FFFFFF",
-		fontSize: 18,
-		textAlign: "center"
 	},
 	imageHolder: {
 		width: 200,
