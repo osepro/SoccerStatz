@@ -5,8 +5,55 @@ import { white, orange, lightgray, green, black, gray, blue, red } from "../util
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AddGame from "./AddGame";
+import LineUp from "./LineUp";
 
-const image = '../assets/soccerstazbg.png'
+const image = '../assets/soccerstazbg.png';
+
+const RouteConfigs = {
+	AddGame: {
+		name: "Add Game",
+		component: AddGame,
+		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />, title: 'Decks' }
+	},
+	LineUp: {
+		component: LineUp,
+		name: "Line Up",
+		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />, title: 'Add Deck' }
+	}
+}
+
+const TabNavigatorConfig = {
+	navigationOptions: {
+		header: null
+	},
+	tabBarOptions: {
+		activeTintColor: Platform.OS === "ios" ? lightgray : white,
+		style: {
+			height: 86,
+			backgroundColor: Platform.OS === "ios" ? white : lightgray,
+			shadowColor: "rgba(0, 0, 0, 0.24)",
+			shadowOffset: {
+				width: 0,
+				height: 3
+			},
+			shadowRadius: 6,
+			shadowOpacity: 1
+		}
+	}
+};
+
+const Tab = Platform.OS === 'ios'
+	? createBottomTabNavigator()
+	: createMaterialTopTabNavigator()
+
+const TabNav = () => (
+	<Tab.Navigator {...TabNavigatorConfig}>
+		<Tab.Screen {...RouteConfigs["AddGame"]} />
+		<Tab.Screen {...RouteConfigs["LineUp"]} />
+	</Tab.Navigator>
+);
 
 function HomeScreen({ navigation }) {
 	return (
@@ -22,7 +69,12 @@ function HomeScreen({ navigation }) {
 			</View>
 			<View style={styles.row}>
 				<Agenda
-					selected={'20120-05-29'}
+					selected={'2020-05-29'}
+					markedDates={{
+						'2020-05-29': { marked: true },
+						'2020-05-28': { marked: true },
+						'2020-05-27': { disabled: true }
+					}}
 					renderItem={(item, firstItemInDay) => { return (<View />); }}
 					renderDay={(day, item) => { return (<View />); }}
 					renderEmptyDate={() => { return (<View />); }}
