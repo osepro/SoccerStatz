@@ -4,9 +4,76 @@ import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import { Agenda } from 'react-native-calendars';
+import AddGame from "./AddGame";
+import LineUp from "./LineUp";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 
-const image = '../assets/soccerstazbg.png'
+const image = '../assets/soccerstazbg.png';
+
+const RouteConfigs = {
+	AddGame: {
+		name: "Add Game",
+		component: AddGame,
+		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={30} color={tintColor} />, title: 'Add Game' }
+	},
+	LineUp: {
+		component: LineUp,
+		name: "Line Up",
+		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={30} color={tintColor} />, title: 'Line Up' }
+	}
+}
+
+const TabNavigatorConfig = {
+	navigationOptions: {
+		header: null
+	},
+	tabBarOptions: {
+		activeTintColor: Platform.OS === "ios" ? lightgray : white,
+		style: {
+			height: 86,
+			backgroundColor: Platform.OS === "ios" ? white : lightgray,
+			shadowColor: "rgba(0, 0, 0, 0.24)",
+			shadowOffset: {
+				width: 0,
+				height: 3
+			},
+			shadowRadius: 6,
+			shadowOpacity: 1
+		}
+	}
+};
+
+const Tab = Platform.OS === 'ios'
+	? createBottomTabNavigator()
+	: createMaterialTopTabNavigator()
+
+const TabNav = () => (
+	<Tab.Navigator {...TabNavigatorConfig}>
+		<Tab.Screen {...RouteConfigs["AddGame"]} />
+		<Tab.Screen {...RouteConfigs["LineUp"]} />
+	</Tab.Navigator>
+);
+
+const StackNavigatorConfig = {
+	headerMode: "screen"
+};
+
+const StackConfig = {
+	TabNav: {
+		name: "TabNav",
+		component: TabNav,
+		options: { headerShown: false }
+	},
+}
+
+const Stack = createStackNavigator();
+const MainNav = () => (
+	<Stack.Navigator {...StackNavigatorConfig}>
+		<Stack.Screen {...StackConfig["TabNav"]} />
+	</Stack.Navigator>
+);
 
 function HomeScreen({ navigation }) {
 	return (
@@ -21,18 +88,21 @@ function HomeScreen({ navigation }) {
 				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
 			</View>
 			<View style={styles.row}>
-				<View style={styles.imageHolder}>
-					<Button title="Open drawer" onPress={() => navigation.openDrawer()} />
-					<Button title="Toggle drawer" onPress={() => navigation.toggleDrawer()} />
-					<ImageBackground source={require(image)} style={styles.image}></ImageBackground>
-				</View>
-			</View>
-			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-				<Button
-					onPress={() => navigation.navigate('Notifications')}
-					title="Go to notifications"
+				<Agenda
+					selected={'2020-05-29'}
+					markedDates={{
+						'2020-05-29': { marked: true },
+						'2020-05-28': { marked: true },
+						'2020-05-27': { disabled: true }
+					}}
+					renderItem={(item, firstItemInDay) => { return (<View />); }}
+					renderDay={(day, item) => { return (<View />); }}
+					renderEmptyDate={() => { return (<View />); }}
+					renderKnob={() => { return (<View />); }}
+					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
 				/>
 			</View>
+			<MainNav />
 		</KeyboardAvoidingView>
 	);
 }
@@ -149,14 +219,15 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
 	},
 	titletext: {
 		fontSize: 35,
 		justifyContent: "center",
 		textAlign: "center",
 		color: orange
+	},
+	noGame: {
+		color: orange,
 	},
 	homeContainer: {
 		flexWrap: "wrap",
@@ -169,7 +240,22 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		width: '70%'
 	},
-
+	item: {
+		backgroundColor: white,
+		borderRadius: Platform.OS === "ios" ? 5 : 2,
+		padding: 20,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 17,
+		justifyContent: "center",
+		shadowRadius: 3,
+		shadowOpacity: 0.8,
+		shadowColor: "rgba(0, 0, 0, 0.24)",
+		shadowOffset: {
+			width: 0,
+			height: 3
+		}
+	},
 	register: {
 		alignItems: "center"
 	},
@@ -182,11 +268,11 @@ const styles = StyleSheet.create({
 		fontSize: 12
 	},
 	imageHolder: {
-		width: 200,
-		height: 200,
+		flex: 1,
 		borderRadius: 30,
 		borderColor: "#FFFFFF",
 		borderWidth: 20,
+
 	},
 	image: {
 		flex: 1,
