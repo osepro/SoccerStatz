@@ -5,9 +5,10 @@ import { white, orange, lightgray, green, black, gray, blue, red } from "../util
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AddGame from "./AddGame";
 import LineUp from "./LineUp";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 
 const image = '../assets/soccerstazbg.png';
 
@@ -15,12 +16,12 @@ const RouteConfigs = {
 	AddGame: {
 		name: "Add Game",
 		component: AddGame,
-		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />, title: 'Decks' }
+		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={30} color={tintColor} />, title: 'Add Game' }
 	},
 	LineUp: {
 		component: LineUp,
 		name: "Line Up",
-		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />, title: 'Add Deck' }
+		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={30} color={tintColor} />, title: 'Line Up' }
 	}
 }
 
@@ -55,6 +56,25 @@ const TabNav = () => (
 	</Tab.Navigator>
 );
 
+const StackNavigatorConfig = {
+	headerMode: "screen"
+};
+
+const StackConfig = {
+	TabNav: {
+		name: "TabNav",
+		component: TabNav,
+		options: { headerShown: false }
+	},
+}
+
+const Stack = createStackNavigator();
+const MainNav = () => (
+	<Stack.Navigator {...StackNavigatorConfig}>
+		<Stack.Screen {...StackConfig["TabNav"]} />
+	</Stack.Navigator>
+);
+
 function HomeScreen({ navigation }) {
 	return (
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -82,6 +102,7 @@ function HomeScreen({ navigation }) {
 					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
 				/>
 			</View>
+			<MainNav />
 		</KeyboardAvoidingView>
 	);
 }

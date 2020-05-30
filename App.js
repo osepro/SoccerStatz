@@ -7,8 +7,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const image = '../SoccerStatz/assets/soccerstazbg.png';
+const Tab = Platform.OS === 'ios'
+	? createBottomTabNavigator()
+	: createMaterialTopTabNavigator()
+
+const TabNav = () => (
+	<Tab.Navigator {...TabNavigatorConfig}>
+		<Tab.Screen {...RouteConfigs["AddGame"]} />
+		<Tab.Screen {...RouteConfigs["LineUp"]} />
+	</Tab.Navigator>
+);
 
 const StackNavigatorConfig = {
 	headerMode: "screen"
