@@ -6,8 +6,50 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 import Login from "./components/Login";
 import Register from "./components/Register";
+import { white, orange, lightgray, green, black, gray, blue, red } from "./utils/colors";
 import Home from "./components/Home";
+import AddGame from "./components/AddGame";
+import LineUp from "./components/LineUp";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const RouteConfigs = {
+	Home: {
+		name: "Home",
+		component: Home,
+		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-home' size={20} color={tintColor} />, title: 'Home' }
+	},
+	AddGame: {
+		name: "Add Game",
+		component: AddGame,
+		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={20} color={tintColor} />, title: 'Add Game' }
+	},
+	LineUp: {
+		component: LineUp,
+		name: "Line Up",
+		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={20} color={tintColor} />, title: 'Line Up' }
+	}
+}
+
+const TabNavigatorConfig = {
+	navigationOptions: {
+		header: null
+	},
+	tabBarOptions: {
+		activeTintColor: Platform.OS === "ios" ? orange : white,
+		style: {
+			height: 86,
+			backgroundColor: Platform.OS === "ios" ? white : lightgray,
+			shadowColor: "rgba(0, 0, 0, 0.24)",
+			shadowOffset: {
+				width: 0,
+				height: 3
+			},
+			shadowRadius: 6,
+			shadowOpacity: 1
+		}
+	}
+};
 
 const Tab = Platform.OS === 'ios'
 	? createBottomTabNavigator()
@@ -15,6 +57,7 @@ const Tab = Platform.OS === 'ios'
 
 const TabNav = () => (
 	<Tab.Navigator {...TabNavigatorConfig}>
+		<Tab.Screen {...RouteConfigs["Home"]} />
 		<Tab.Screen {...RouteConfigs["AddGame"]} />
 		<Tab.Screen {...RouteConfigs["LineUp"]} />
 	</Tab.Navigator>
@@ -25,9 +68,9 @@ const StackNavigatorConfig = {
 };
 
 const StackConfig = {
-	Home: {
+	TabNav: {
 		name: "Home",
-		component: Home,
+		component: TabNav,
 		options: { headerShown: false }
 	},
 	Login: {
@@ -47,7 +90,7 @@ const MainNav = () => (
 	<Stack.Navigator {...StackNavigatorConfig}>
 		<Stack.Screen {...StackConfig["Login"]} />
 		<Stack.Screen {...StackConfig["Register"]} />
-		<Stack.Screen {...StackConfig["Home"]} />
+		<Stack.Screen {...StackConfig["TabNav"]} />
 	</Stack.Navigator>
 );
 

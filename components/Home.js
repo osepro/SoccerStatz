@@ -5,75 +5,8 @@ import { white, orange, lightgray, green, black, gray, blue, red } from "../util
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import AddGame from "./AddGame";
-import LineUp from "./LineUp";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from "@react-navigation/stack";
 
 const image = '../assets/soccerstazbg.png';
-
-const RouteConfigs = {
-	AddGame: {
-		name: "Add Game",
-		component: AddGame,
-		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={30} color={tintColor} />, title: 'Add Game' }
-	},
-	LineUp: {
-		component: LineUp,
-		name: "Line Up",
-		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={30} color={tintColor} />, title: 'Line Up' }
-	}
-}
-
-const TabNavigatorConfig = {
-	navigationOptions: {
-		header: null
-	},
-	tabBarOptions: {
-		activeTintColor: Platform.OS === "ios" ? lightgray : white,
-		style: {
-			height: 86,
-			backgroundColor: Platform.OS === "ios" ? white : lightgray,
-			shadowColor: "rgba(0, 0, 0, 0.24)",
-			shadowOffset: {
-				width: 0,
-				height: 3
-			},
-			shadowRadius: 6,
-			shadowOpacity: 1
-		}
-	}
-};
-
-const Tab = Platform.OS === 'ios'
-	? createBottomTabNavigator()
-	: createMaterialTopTabNavigator()
-
-const TabNav = () => (
-	<Tab.Navigator {...TabNavigatorConfig}>
-		<Tab.Screen {...RouteConfigs["AddGame"]} />
-		<Tab.Screen {...RouteConfigs["LineUp"]} />
-	</Tab.Navigator>
-);
-
-const StackNavigatorConfig = {
-	headerMode: "screen"
-};
-
-const StackConfig = {
-	TabNav: {
-		name: "TabNav",
-		component: TabNav,
-		options: { headerShown: false }
-	},
-}
-
-const Stack = createStackNavigator();
-const MainNav = () => (
-	<Stack.Navigator {...StackNavigatorConfig}>
-		<Stack.Screen {...StackConfig["TabNav"]} />
-	</Stack.Navigator>
-);
 
 function HomeScreen({ navigation }) {
 	return (
@@ -102,10 +35,11 @@ function HomeScreen({ navigation }) {
 					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
 				/>
 			</View>
-			<MainNav />
 		</KeyboardAvoidingView>
 	);
 }
+
+
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -168,26 +102,6 @@ class Home extends Component {
 		username: '',
 		password: '',
 	}
-
-	renderItem = ({ today, ...metrics }, formattedDate, key) => (
-		<View style={styles.item}>
-			{today ? (
-				<View>
-					<DateHeader date={formattedDate} />
-					<Text style={styles.noDataText}>{today}</Text>
-				</View>
-			) : (
-					<TouchableOpacity
-						onPress={() =>
-							this.props.navigation.navigate("EntryDetail", { entryId: key })
-						}
-					>
-						<Text> Details </Text>
-					</TouchableOpacity>
-				)}
-		</View>
-	);
-
 
 	render() {
 		const { login } = this.props;
