@@ -1,19 +1,20 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
-import { white, orange, green, black, gray, blue, lightgray, } from "../utils/colors";
+import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { saveUser, getUser } from "../utils/api";
+import { addGame, getGame } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addUser } from "../actions/register";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 class AddGame extends Component {
 	state = {
 		gamelocation: '',
-		date: new Date(1598051730000),
+		date: new Date(),
 		mode: 'date',
 		show: false,
 		yourteam: '',
@@ -38,11 +39,11 @@ class AddGame extends Component {
 		})
 	}
 
-	setDate = (event, selectedDate) => {
-		const currentDate = selectedDate || this.state.date;
+	setDate = (selectedDate) => {
+		//const currentDate = selectedDate || this.state.date;
 		this.setState({
-			show: true,
-			date: currentDate
+			show: !this.state.show,
+			date: selectedDate
 		})
 	};
 
@@ -61,18 +62,22 @@ class AddGame extends Component {
 	}
 
 	handleAddGame = () => {
-		const { yourteam, opponent, venue, } = this.state;
+		const { yourteam, opponent, venue, date } = this.state;
 		const { dispatch } = this.props;
 
 		if (yourteam.length > 0 && opponent.length > 0) {
-			if (password !== cpassword) alert('👎 password does not match');
+			if (yourteam === opponent) alert('👎 Opponent and Team cannot be the same');
 			else {
-				const user = {
+				const gameDetails = {
 					id: RandomGeneratedNumber(),
-					name: this.state.username,
-					password: Base64.encode(this.state.password.toLocaleLowerCase()),
+					gamedate: date,
+					team: yourteam,
+					opponent: yourteam,
+					venue: venue
 				}
-				saveUser(user).then(data => {
+				addGame(gameDetails);
+				alert('👍account successfully created');
+				/*saveUser(user).then(data => {
 					if (data) {
 						dispatch(addUser(user.id, user.name, user.password));
 						alert('👍account successfully created');
@@ -81,7 +86,7 @@ class AddGame extends Component {
 					else {
 						alert('👎error!! username name already exist');
 					}
-				});
+				});*/
 			}
 		}
 		else alert('😏 compulsory fields empty');
@@ -89,7 +94,9 @@ class AddGame extends Component {
 
 
 	render() {
-		const { yourteam, opponent, venue, show, date } = this.state;
+		const { yourteam, opponent, venue, show, date, mode } = this.state;
+		//console.log(getGame().then(result => console.log(result)));
+		console.log(this.props.state);
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -103,16 +110,17 @@ class AddGame extends Component {
 					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
 					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
 					<TouchableOpacity onPress={this.setGameDate}>
-						<Text style={styles.textLabel}>Click to set game date: {Moment(date).format('MM-DD-YYYY')}</Text>
+						<Text style={styles.textLabel}>
+							<Text>📅 Set game date: </Text>
+							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
+						</Text>
 					</TouchableOpacity>
-					{show && <DateTimePicker
-						testID="dateTimePicker"
-						timeZoneOffsetInMinutes={0}
-						value={this.state.date}
-						mode={this.state.mode}
-						is24Hour={true}
-						display="default"
-						onChange={this.setDate}
+					{<DateTimePickerModal
+						isVisible={show}
+						mode="date"
+						onConfirm={this.setDate}
+						onCancel={this.setGameDate}
+						minimumDate={new Date()}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
 						<Text style={styles.btnText}>Add Game</Text>
@@ -120,6 +128,12 @@ class AddGame extends Component {
 				</View>
 			</KeyboardAvoidingView>
 		)
+	}
+}
+
+function mapStateToProps(state) {
+	return {
+		state
 	}
 }
 
@@ -153,6 +167,23 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: gray,
 		marginTop: 15
+	},
+	dateSeleted: {
+		color: gray
+	},
+	btn: {
+		backgroundColor: lightBlue,
+		padding: 15,
+		paddingLeft: 80,
+		paddingRight: 80,
+		borderRadius: 5,
+		marginTop: 20,
+		marginBottom: 30,
+	},
+	btnText: {
+		color: "#FFFFFF",
+		fontSize: 18,
+		textAlign: "center"
 	},
 	homeContainer: {
 		flexWrap: "wrap",
@@ -190,20 +221,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 20
 	},
-	btn: {
-		backgroundColor: gray,
-		padding: 15,
-		paddingLeft: 80,
-		paddingRight: 80,
-		borderRadius: 5,
-		marginTop: 20,
-		marginBottom: 30,
-	},
-	btnText: {
-		color: "#FFFFFF",
-		fontSize: 18,
-		textAlign: "center"
-	}
 })
 
-export default connect()(AddGame);
+export default connect(mapStateToProps)(AddGame);

@@ -29,7 +29,7 @@ class Login extends Component {
 		const encryptPassword = Base64.encode(password);
 		getUser(username, encryptPassword).then(data => {
 			if (data) {
-				dispatch(login(username));
+				dispatch(login(data[0].id, data[0].name));
 				this.props.navigation.navigate('Home')
 			}
 			else {

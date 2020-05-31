@@ -5,6 +5,10 @@ import { white, orange, lightgray, green, black, gray, blue, red } from "../util
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
+import AddGame from "./AddGame";
+import LineUp from "./LineUp";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 
 const image = '../assets/soccerstazbg.png';
 
@@ -38,8 +42,6 @@ function HomeScreen({ navigation }) {
 		</KeyboardAvoidingView>
 	);
 }
-
-
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -102,6 +104,26 @@ class Home extends Component {
 		username: '',
 		password: '',
 	}
+
+	renderItem = ({ today, ...metrics }, formattedDate, key) => (
+		<View style={styles.item}>
+			{today ? (
+				<View>
+					<DateHeader date={formattedDate} />
+					<Text style={styles.noDataText}>{today}</Text>
+				</View>
+			) : (
+					<TouchableOpacity
+						onPress={() =>
+							this.props.navigation.navigate("EntryDetail", { entryId: key })
+						}
+					>
+						<Text> Details </Text>
+					</TouchableOpacity>
+				)}
+		</View>
+	);
+
 
 	render() {
 		const { login } = this.props;
