@@ -1,25 +1,50 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
-import { white, orange, green, black, gray, lightgray, } from "../utils/colors";
+import { white, orange, green, black, gray, blue, lightgray, } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { saveUser, getUser } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addUser } from "../actions/register";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Moment from 'moment';
 
 class AddGame extends Component {
 	state = {
-		username: '',
-		password: '',
-		cpassword: '',
+		gamelocation: '',
+		date: new Date(1598051730000),
+		mode: 'date',
+		show: false,
+		yourteam: '',
+		opponent: '',
+		venue: '',
+	}
+	updateUser = (gamelocation) => {
+		this.setState({ gamelocation })
 	}
 
-	setLoginData = (input, name) => {
+	onChange = (event, selectedDate) => {
+		const currentDate = selectedDate || date;
 		this.setState({
-			[name]: input
+			show: true,
+			date: currentDate
+		})
+	};
+
+	setGameDate = () => {
+		this.setState({
+			show: !this.state.show
 		})
 	}
+
+	setDate = (event, selectedDate) => {
+		const currentDate = selectedDate || this.state.date;
+		this.setState({
+			show: true,
+			date: currentDate
+		})
+	};
 
 	setMainHeader = () => {
 		const { deck } = this.props.route.params;
@@ -29,15 +54,17 @@ class AddGame extends Component {
 		});
 	}
 
-	loginPage = () => {
-		this.props.navigation.navigate('Login');
+	setGameData = (input, name) => {
+		this.setState({
+			[name]: input
+		})
 	}
 
-	handleRegister = () => {
-		const { username, password, cpassword } = this.state;
+	handleAddGame = () => {
+		const { yourteam, opponent, venue, } = this.state;
 		const { dispatch } = this.props;
 
-		if (username.length > 0 && password.length > 0) {
+		if (yourteam.length > 0 && opponent.length > 0) {
 			if (password !== cpassword) alert('👎 password does not match');
 			else {
 				const user = {
@@ -57,30 +84,37 @@ class AddGame extends Component {
 				});
 			}
 		}
-		else alert('😏 username and password are compulsory');
+		else alert('😏 compulsory fields empty');
 	}
 
 
 	render() {
-		const { username, password, cpassword } = this.state;
+		const { yourteam, opponent, venue, show, date } = this.state;
+		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
-					<View style={styles.homeContainer}>
-						<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-							<FontAwesome name='navicon' size={30} color={gray} />
-						</TouchableOpacity>
-					</View>
 					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
 				</View>
 				<View style={styles.row}>
-					<Text>Please fill form add a game....</Text>
-					<TextInput style={styles.input} placeholder="Please enter your team" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
-					<TextInput style={styles.input} placeholder="Please enter team playing" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
-					<TextInput style={styles.input} placeholder="Team A" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
-
-					<TouchableOpacity style={styles.btn} onPress={this.handleRegister}>
+					<Text style={styles.formText}>Please fill form to add game....</Text>
+					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
+					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
+					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
+					<TouchableOpacity onPress={this.setGameDate}>
+						<Text style={styles.textLabel}>Click to set game date: {Moment(date).format('MM-DD-YYYY')}</Text>
+					</TouchableOpacity>
+					{show && <DateTimePicker
+						testID="dateTimePicker"
+						timeZoneOffsetInMinutes={0}
+						value={this.state.date}
+						mode={this.state.mode}
+						is24Hour={true}
+						display="default"
+						onChange={this.setDate}
+					/>}
+					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
 						<Text style={styles.btnText}>Add Game</Text>
 					</TouchableOpacity>
 				</View>
@@ -97,6 +131,7 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flex: 1,
+		justifyContent: "center"
 	},
 	statusBar: {
 		flexDirection: "row",
@@ -106,6 +141,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		paddingTop: 40,
 		paddingBottom: 20,
+		justifyContent: "center"
 	},
 	homeTitle: {
 		fontSize: 25,
@@ -113,16 +149,20 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		width: '70%'
 	},
+	formText: {
+		fontSize: 20,
+		color: gray,
+		marginTop: 15
+	},
 	homeContainer: {
 		flexWrap: "wrap",
 		justifyContent: "flex-start",
 		width: '10%'
 	},
-	titletext: {
-		fontSize: 35,
-		justifyContent: "center",
-		textAlign: "center",
-		color: orange
+	textLabel: {
+		fontSize: 15,
+		color: gray,
+		marginTop: 20,
 	},
 	register: {
 		alignItems: "center"
