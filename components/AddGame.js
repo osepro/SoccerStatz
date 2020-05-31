@@ -63,20 +63,20 @@ class AddGame extends Component {
 
 	handleAddGame = () => {
 		const { yourteam, opponent, venue, date } = this.state;
-		const { dispatch } = this.props;
+		const { dispatch, login } = this.props;
 
 		if (yourteam.length > 0 && opponent.length > 0) {
 			if (yourteam === opponent) alert('👎 Opponent and Team cannot be the same');
 			else {
 				const gameDetails = {
-					id: RandomGeneratedNumber(),
+					id: login.id,
 					gamedate: date,
 					team: yourteam,
 					opponent: yourteam,
 					venue: venue
 				}
 				addGame(gameDetails);
-				alert('👍account successfully created');
+				alert('⚽️ Game successfully added');
 				/*saveUser(user).then(data => {
 					if (data) {
 						dispatch(addUser(user.id, user.name, user.password));
@@ -95,7 +95,7 @@ class AddGame extends Component {
 
 	render() {
 		const { yourteam, opponent, venue, show, date, mode } = this.state;
-		//console.log(getGame().then(result => console.log(result)));
+		console.log(getGame().then(result => console.log(result)));
 		console.log(this.props.state);
 		Moment.locale('en');
 		return (
@@ -131,9 +131,9 @@ class AddGame extends Component {
 	}
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ login }) {
 	return {
-		state
+		login
 	}
 }
 

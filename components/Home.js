@@ -1,14 +1,12 @@
 import React, { Component, Fragment } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar, ImageBackground } from "react-native"
 import { connect } from "react-redux";
-import { white, orange, lightgray, green, black, gray, blue, red } from "../utils/colors";
+import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import AddGame from "./AddGame";
-import LineUp from "./LineUp";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from "@react-navigation/stack";
+import { logout } from "../actions/login";
+import UserName from "./UserName";
 
 const image = '../assets/soccerstazbg.png';
 
@@ -23,6 +21,7 @@ function HomeScreen({ navigation }) {
 					</TouchableOpacity>
 				</View>
 				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+				<Text style={styles.initTxt}><UserName /></Text>
 			</View>
 			<View style={styles.row}>
 				<Agenda
@@ -42,6 +41,8 @@ function HomeScreen({ navigation }) {
 		</KeyboardAvoidingView>
 	);
 }
+
+
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -76,10 +77,11 @@ function deletePlayer() {
 	)
 }
 
-function logOut() {
+function logOut({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Button onPress={() => navigation.goBack()} title="Sign Out" />
+			<Text>Are you sure you want to Log Out</Text>
+			<Button onPress={() => navigation.navigate('Login')} title="Log Out" />
 		</View>
 	)
 }
@@ -93,7 +95,8 @@ function MyDrawer() {
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
-			<Drawer.Screen name="LogOut" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'sign-out' : 'sign-out'} size={20} color={red} /> }} />
+			<Drawer.Screen name="Log Out" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'sign-out' : 'sign-out'} size={20} color={red} /> }} />
+			<Drawer.Screen name="Welcome" component={''} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-o' : 'user-o'} size={20} color={lightBlue} /> }} />
 		</Drawer.Navigator>
 	);
 }
@@ -105,28 +108,7 @@ class Home extends Component {
 		password: '',
 	}
 
-	renderItem = ({ today, ...metrics }, formattedDate, key) => (
-		<View style={styles.item}>
-			{today ? (
-				<View>
-					<DateHeader date={formattedDate} />
-					<Text style={styles.noDataText}>{today}</Text>
-				</View>
-			) : (
-					<TouchableOpacity
-						onPress={() =>
-							this.props.navigation.navigate("EntryDetail", { entryId: key })
-						}
-					>
-						<Text> Details </Text>
-					</TouchableOpacity>
-				)}
-		</View>
-	);
-
-
 	render() {
-		const { login } = this.props;
 		return (
 			<MyDrawer />
 		)
@@ -175,6 +157,13 @@ const styles = StyleSheet.create({
 		color: orange,
 		textAlign: "center",
 		width: '70%'
+	},
+	initTxt: {
+		backgroundColor: lightBlue,
+		color: white,
+		fontWeight: "bold",
+		borderRadius: 15,
+		padding: 10,
 	},
 	item: {
 		backgroundColor: white,
