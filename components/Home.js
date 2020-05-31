@@ -1,79 +1,14 @@
 import React, { Component, Fragment } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar, ImageBackground } from "react-native"
 import { connect } from "react-redux";
-import { white, orange, lightgray, green, black, gray, blue, red } from "../utils/colors";
+import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import AddGame from "./AddGame";
-import LineUp from "./LineUp";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from "@react-navigation/stack";
+import { logout } from "../actions/login";
+import UserName from "./UserName";
 
 const image = '../assets/soccerstazbg.png';
-
-const RouteConfigs = {
-	AddGame: {
-		name: "Add Game",
-		component: AddGame,
-		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={30} color={tintColor} />, title: 'Add Game' }
-	},
-	LineUp: {
-		component: LineUp,
-		name: "Line Up",
-		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={30} color={tintColor} />, title: 'Line Up' }
-	}
-}
-
-const TabNavigatorConfig = {
-	navigationOptions: {
-		header: null
-	},
-	tabBarOptions: {
-		activeTintColor: Platform.OS === "ios" ? lightgray : white,
-		style: {
-			height: 86,
-			backgroundColor: Platform.OS === "ios" ? white : lightgray,
-			shadowColor: "rgba(0, 0, 0, 0.24)",
-			shadowOffset: {
-				width: 0,
-				height: 3
-			},
-			shadowRadius: 6,
-			shadowOpacity: 1
-		}
-	}
-};
-
-const Tab = Platform.OS === 'ios'
-	? createBottomTabNavigator()
-	: createMaterialTopTabNavigator()
-
-const TabNav = () => (
-	<Tab.Navigator {...TabNavigatorConfig}>
-		<Tab.Screen {...RouteConfigs["AddGame"]} />
-		<Tab.Screen {...RouteConfigs["LineUp"]} />
-	</Tab.Navigator>
-);
-
-const StackNavigatorConfig = {
-	headerMode: "screen"
-};
-
-const StackConfig = {
-	TabNav: {
-		name: "TabNav",
-		component: TabNav,
-		options: { headerShown: false }
-	},
-}
-
-const Stack = createStackNavigator();
-const MainNav = () => (
-	<Stack.Navigator {...StackNavigatorConfig}>
-		<Stack.Screen {...StackConfig["TabNav"]} />
-	</Stack.Navigator>
-);
 
 function HomeScreen({ navigation }) {
 	return (
@@ -86,6 +21,7 @@ function HomeScreen({ navigation }) {
 					</TouchableOpacity>
 				</View>
 				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+				<Text style={styles.initTxt}><UserName /></Text>
 			</View>
 			<View style={styles.row}>
 				<Agenda
@@ -102,10 +38,11 @@ function HomeScreen({ navigation }) {
 					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
 				/>
 			</View>
-			<MainNav />
 		</KeyboardAvoidingView>
 	);
 }
+
+
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -140,10 +77,11 @@ function deletePlayer() {
 	)
 }
 
-function logOut() {
+function logOut({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Button onPress={() => navigation.goBack()} title="Sign Out" />
+			<Text>Are you sure you want to Log Out</Text>
+			<Button onPress={() => navigation.navigate('Login')} title="Log Out" />
 		</View>
 	)
 }
@@ -157,7 +95,8 @@ function MyDrawer() {
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
-			<Drawer.Screen name="LogOut" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'sign-out' : 'sign-out'} size={20} color={red} /> }} />
+			<Drawer.Screen name="Log Out" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'sign-out' : 'sign-out'} size={20} color={red} /> }} />
+			<Drawer.Screen name="Welcome" component={''} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-o' : 'user-o'} size={20} color={lightBlue} /> }} />
 		</Drawer.Navigator>
 	);
 }
@@ -169,28 +108,7 @@ class Home extends Component {
 		password: '',
 	}
 
-	renderItem = ({ today, ...metrics }, formattedDate, key) => (
-		<View style={styles.item}>
-			{today ? (
-				<View>
-					<DateHeader date={formattedDate} />
-					<Text style={styles.noDataText}>{today}</Text>
-				</View>
-			) : (
-					<TouchableOpacity
-						onPress={() =>
-							this.props.navigation.navigate("EntryDetail", { entryId: key })
-						}
-					>
-						<Text> Details </Text>
-					</TouchableOpacity>
-				)}
-		</View>
-	);
-
-
 	render() {
-		const { login } = this.props;
 		return (
 			<MyDrawer />
 		)
@@ -239,6 +157,13 @@ const styles = StyleSheet.create({
 		color: orange,
 		textAlign: "center",
 		width: '70%'
+	},
+	initTxt: {
+		backgroundColor: lightBlue,
+		color: white,
+		fontWeight: "bold",
+		borderRadius: 15,
+		padding: 10,
 	},
 	item: {
 		backgroundColor: white,

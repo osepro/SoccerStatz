@@ -1,4 +1,5 @@
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
 export const REGISTER = "REGISTER";
 export const ADD_GAME = "ADD_GAME";
 export const VIEW_GAME = "VIEW_GAME";

@@ -2,7 +2,7 @@ import { AsyncStorage } from "react-native";
 import { SOCCERSTAZ_STORAGE_KEY } from "./helpers"
 import _ from 'lodash';
 
-export function retrieveUsers() {
+export function getGame() {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(results => {
 		const data = JSON.parse(results);
 		return data;
@@ -24,12 +24,26 @@ export function saveUser(user) {
 	});
 };
 
+export function addGame(game) {
+	//return AsyncStorage.mergeItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify({ [game.id]: game }));
+	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
+		const user = JSON.parse(users);
+		user[game.id] = {
+			...user[game.id],
+			matches: [
+				...user[game.id].matches, game
+			]
+		};
+		AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user));
+	});
+}
+
 export function getUser(username, password) {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
 		const usernames = Object.values(JSON.parse(users));
 		const userdetail = _.filter(usernames, { name: username, password });
 		if (userdetail.length === 1) {
-			return true;
+			return userdetail;
 		}
 		return false;
 	});
