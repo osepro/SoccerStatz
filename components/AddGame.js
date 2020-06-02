@@ -72,11 +72,19 @@ class AddGame extends Component {
 					id: login.id,
 					gamedate: date,
 					team: yourteam,
-					opponent: yourteam,
+					opponent: opponent,
 					venue: venue
 				}
-				addGame(gameDetails);
-				alert('⚽️ Game successfully added');
+				addGame(login.id, gameDetails).then(value => {
+					if (value) {
+						alert('⚽️ Game successfully added');
+						this.props.navigation.navigate('Home');
+					}
+					else {
+						alert('👎 an error occured why creating game. Please try again')
+					}
+				});
+
 				/*saveUser(user).then(data => {
 					if (data) {
 						dispatch(addUser(user.id, user.name, user.password));
@@ -95,8 +103,8 @@ class AddGame extends Component {
 
 	render() {
 		const { yourteam, opponent, venue, show, date, mode } = this.state;
-		console.log(getGame().then(result => console.log(result)));
-		console.log(this.props.state);
+		const { dispatch, login } = this.props;
+		console.log(getGame().then(result => console.log('Here => ', result)));
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
