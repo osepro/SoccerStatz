@@ -59,7 +59,7 @@ function NotificationsScreen({ navigation }) {
 	);
 }
 
-function addPlayer() {
+function addPlayer({ navigation }) {
 	return (
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
 			<View style={styles.statusBar}>
@@ -77,7 +77,7 @@ function addPlayer() {
 	)
 }
 
-function viewPlayer() {
+function viewPlayer({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			<Button onPress={() => navigation.goBack()} title="viewPlayer" />
@@ -85,7 +85,7 @@ function viewPlayer() {
 	)
 }
 
-function deletePlayer() {
+function deletePlayer({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 			<Button onPress={() => navigation.goBack()} title="Delete Player" />
