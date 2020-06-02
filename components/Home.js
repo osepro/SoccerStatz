@@ -7,6 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
 import { logout } from "../actions/login";
 import UserName from "./UserName";
+import AddPlayer from "./AddPlayer";
 
 const image = '../assets/soccerstazbg.png';
 
@@ -60,10 +61,19 @@ function NotificationsScreen({ navigation }) {
 
 function addPlayer() {
 	return (
-		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<FontAwesome name='plus-square' size={30} color={blue} />
-			<Button onPress={() => navigation.goBack()} title="Add Player" />
-		</View>
+		<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<View style={styles.statusBar}>
+				<StatusBar barStyle="light-content" />
+				<View style={styles.homeContainer}>
+					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+						<FontAwesome name='navicon' size={30} color={gray} />
+					</TouchableOpacity>
+				</View>
+				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+				<Text style={styles.initTxt}><UserName /></Text>
+			</View>
+			<AddPlayer />
+		</KeyboardAvoidingView>
 	)
 }
 
