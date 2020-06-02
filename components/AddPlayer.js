@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { addGame, getGame } from "../utils/api";
+import { savePlayer, getGame } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addUser } from "../actions/register";
 import { connect } from "react-redux";
@@ -17,9 +17,11 @@ class AddPlayer extends Component {
 		date: new Date(),
 		mode: 'date',
 		show: false,
-		yourteam: '',
-		opponent: '',
-		venue: '',
+		fullname: '',
+		position: '',
+		jersey: '',
+		height: '',
+		weight: '',
 	}
 	updateUser = (gamelocation) => {
 		this.setState({ gamelocation })
@@ -33,14 +35,13 @@ class AddPlayer extends Component {
 		})
 	};
 
-	setGameDate = () => {
+	setPlayerDOB = () => {
 		this.setState({
 			show: !this.state.show
 		})
 	}
 
 	setDate = (selectedDate) => {
-		//const currentDate = selectedDate || this.state.date;
 		this.setState({
 			show: !this.state.show,
 			date: selectedDate
@@ -55,33 +56,34 @@ class AddPlayer extends Component {
 		});
 	}
 
-	setGameData = (input, name) => {
+	setPlayerData = (input, name) => {
 		this.setState({
 			[name]: input
 		})
 	}
 
 	handleAddGame = () => {
-		const { yourteam, opponent, venue, date } = this.state;
+		const { fullname, position, jersey, height, weight, date } = this.state;
 		const { dispatch, login } = this.props;
 
-		if (yourteam.length > 0 && opponent.length > 0) {
-			if (yourteam === opponent) alert('👎 Opponent and Team cannot be the same');
+		if (fullname.length > 0 && position.length > 0) {
+			if (fullname === position) alert('👎 an error occured in your input data');
 			else {
-				const gameDetails = {
-					id: login.id,
-					gamedate: date,
-					team: yourteam,
-					opponent: opponent,
-					venue: venue
+				const newPlayer = {
+					fullname: fullname,
+					position: position,
+					jersey: jersey,
+					height: height,
+					weight: weight,
+					dateofbirth: date,
 				}
-				addGame(login.id, gameDetails).then(value => {
+				savePlayer(login.id, newPlayer).then(value => {
 					if (value) {
-						alert('⚽️ Game successfully added');
-						this.props.navigation.navigate('Home');
+						alert('👍 Player successfully added');
+						//this.props.navigation.navigate('Home');
 					}
 					else {
-						alert('👎 an error occured why creating game. Please try again')
+						alert('👎 an error occured why adding game. Please try again')
 					}
 				});
 			}
@@ -91,17 +93,19 @@ class AddPlayer extends Component {
 
 
 	render() {
-		const { yourteam, opponent, venue, show, date } = this.state;
+		const { fullname, position, jersey, height, weight, show, date } = this.state;
+		getGame().then(user => console.log(user));
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
 					<Text style={styles.formText}>Please fill form to add player....</Text>
-					<TextInput style={styles.input} placeholder="enter fullname" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
-					<TextInput style={styles.input} placeholder="enter position" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
-					<TextInput style={styles.input} placeholder="enter height" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
-					<TextInput style={styles.input} placeholder="enter weight" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
-					<TouchableOpacity onPress={this.setGameDate}>
+					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
+					<TextInput style={styles.input} placeholder="enter position" value={position} onChangeText={(text) => this.setPlayerData(text, "position")} />
+					<TextInput style={styles.input} placeholder="enter player's jersey" value={jersey} onChangeText={(text) => this.setPlayerData(text, "jersey")} />
+					<TextInput style={styles.input} placeholder="enter height" value={height} onChangeText={(text) => this.setPlayerData(text, "height")} />
+					<TextInput style={styles.input} placeholder="enter weight" value={weight} onChangeText={(text) => this.setPlayerData(text, "weight")} />
+					<TouchableOpacity onPress={this.setPlayerDOB}>
 						<Text style={styles.textLabel}>
 							<Text>📅 choose player's DOB: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
@@ -111,8 +115,7 @@ class AddPlayer extends Component {
 						isVisible={show}
 						mode="date"
 						onConfirm={this.setDate}
-						onCancel={this.setGameDate}
-						minimumDate={new Date()}
+						onCancel={this.setPlayerDOB}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
 						<Text style={styles.btnText}>Add Player</Text>
