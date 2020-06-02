@@ -8,6 +8,8 @@ import { Agenda } from 'react-native-calendars';
 import { logout } from "../actions/login";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
+import ViewPlayer from "./ViewPlayer";
+import DeletePlayer from "./DeletePlayer"
 
 const image = '../assets/soccerstazbg.png';
 
@@ -79,17 +81,37 @@ function addPlayer({ navigation }) {
 
 function viewPlayer({ navigation }) {
 	return (
-		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Button onPress={() => navigation.goBack()} title="viewPlayer" />
-		</View>
+		<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<View style={styles.statusBar}>
+				<StatusBar barStyle="light-content" />
+				<View style={styles.homeContainer}>
+					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+						<FontAwesome name='navicon' size={30} color={gray} />
+					</TouchableOpacity>
+				</View>
+				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+				<Text style={styles.initTxt}><UserName /></Text>
+			</View>
+			<ViewPlayer />
+		</KeyboardAvoidingView>
 	)
 }
 
 function deletePlayer({ navigation }) {
 	return (
-		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Button onPress={() => navigation.goBack()} title="Delete Player" />
-		</View>
+		<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<View style={styles.statusBar}>
+				<StatusBar barStyle="light-content" />
+				<View style={styles.homeContainer}>
+					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+						<FontAwesome name='navicon' size={30} color={gray} />
+					</TouchableOpacity>
+				</View>
+				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+				<Text style={styles.initTxt}><UserName /></Text>
+			</View>
+			<DeletePlayer />
+		</KeyboardAvoidingView>
 	)
 }
 
