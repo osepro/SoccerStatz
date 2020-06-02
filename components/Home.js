@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar, ImageBackground } from "react-native"
+import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar } from "react-native"
 import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
