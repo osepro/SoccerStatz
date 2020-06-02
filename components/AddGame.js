@@ -84,17 +84,6 @@ class AddGame extends Component {
 						alert('👎 an error occured why creating game. Please try again')
 					}
 				});
-
-				/*saveUser(user).then(data => {
-					if (data) {
-						dispatch(addUser(user.id, user.name, user.password));
-						alert('👍account successfully created');
-						this.props.navigation.navigate('Login');
-					}
-					else {
-						alert('👎error!! username name already exist');
-					}
-				});*/
 			}
 		}
 		else alert('😏 compulsory fields empty');
@@ -102,9 +91,7 @@ class AddGame extends Component {
 
 
 	render() {
-		const { yourteam, opponent, venue, show, date, mode } = this.state;
-		const { dispatch, login } = this.props;
-		console.log(getGame().then(result => console.log('Here => ', result)));
+		const { yourteam, opponent, venue, show, date } = this.state;
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
