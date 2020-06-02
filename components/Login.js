@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from "react-native"
-import { white, orange, green, black, gray } from "../utils/colors";
+import { white, orange, gray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Base64 } from 'js-base64';
 import { getUser } from "../utils/api";

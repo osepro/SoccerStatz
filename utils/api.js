@@ -24,17 +24,22 @@ export function saveUser(user) {
 	});
 };
 
-export function addGame(game) {
-	//return AsyncStorage.mergeItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify({ [game.id]: game }));
+export function addGame(userid, game) {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
 		const user = JSON.parse(users);
-		user[game.id] = {
-			...user[game.id],
-			matches: [
-				...user[game.id].matches, game
+		user[userid] = {
+			...user[userid],
+			matches: [...user[userid].matches,
+			{
+				gamedate: game.gamedate,
+				team: game.team,
+				opponent: game.opponent,
+				venue: game.venue
+			}
 			]
 		};
-		AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user));
+		if (AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user))) return true;
+		else return false
 	});
 }
 

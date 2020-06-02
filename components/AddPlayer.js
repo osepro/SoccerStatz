@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-class AddGame extends Component {
+class AddPlayer extends Component {
 	state = {
 		gamelocation: '',
 		date: new Date(),
@@ -95,18 +95,15 @@ class AddGame extends Component {
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
-				<View style={styles.statusBar}>
-					<StatusBar barStyle="light-content" />
-					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				</View>
 				<View style={styles.row}>
-					<Text style={styles.formText}>Please fill form to add game....</Text>
-					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
-					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
-					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
+					<Text style={styles.formText}>Please fill form to add player....</Text>
+					<TextInput style={styles.input} placeholder="enter fullname" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
+					<TextInput style={styles.input} placeholder="enter position" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
+					<TextInput style={styles.input} placeholder="enter height" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
+					<TextInput style={styles.input} placeholder="enter weight" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
 					<TouchableOpacity onPress={this.setGameDate}>
 						<Text style={styles.textLabel}>
-							<Text>📅 Set game date: </Text>
+							<Text>📅 choose player's DOB: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
@@ -118,7 +115,7 @@ class AddGame extends Component {
 						minimumDate={new Date()}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
-						<Text style={styles.btnText}>Add Game</Text>
+						<Text style={styles.btnText}>Add Player</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -218,4 +215,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default connect(mapStateToProps)(AddGame);
+export default connect(mapStateToProps)(AddPlayer);
