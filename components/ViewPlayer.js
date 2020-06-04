@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { getGame } from "../utils/api";
@@ -7,21 +7,15 @@ import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
 
-const DATA = [
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'James Dune',
-	},
-	{
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Avil Larry',
-	},
-	{
-		id: '58694a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Steven Cov',
-	},
+const rows = [
+	{ id: 0, text: 'View' },
+	{ id: 1, text: 'Text' },
+	{ id: 2, text: 'Image' },
+	{ id: 3, text: 'ScrollView' },
+	{ id: 4, text: 'ListView' },
+]
 
-];
+const extractKey = ({ id }) => id
 
 function Item({ player }) {
 	return (
@@ -40,20 +34,21 @@ class ViewPlayer extends Component {
 	componentDidMount() {
 		const { login } = this.props;
 		getGame().then(user => this.setState({ players: user[login.id].players }));
-		console.log(login.id)
 	}
 
 	render() {
 		Moment.locale('en');
 		const { players } = this.state;
 		return (
-			<SafeAreaView style={styles.container}>
-				<FlatList
-					data={players}
-					renderItem={({ player }) => <Item title={player.fullname} />}
-					keyExtractor={player => player.fullname}
-				/>
-			</SafeAreaView>
+			<ScrollView style={styles.container}>
+				{
+					players.map((item, i) => (
+						<View key={i} style={styles.list}>
+							<Text>{item.fullname}</Text>
+						</View>
+					))
+				}
+			</ScrollView>
 		)
 	}
 }
@@ -78,9 +73,7 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	list: {
-		padding: 40,
-		borderBottomColor: black,
-		borderWidth: 3
+		padding: 8,
 	},
 	statusBar: {
 		flexDirection: "row",
