@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { addGame, getGame } from "../utils/api";
+import { getGame } from "../utils/api";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
@@ -23,35 +23,35 @@ const DATA = [
 
 ];
 
-function Item({ title }) {
+function Item({ player }) {
 	return (
-		<View style={styles.item}>
-			<Text style={styles.title}>{title}</Text>
+		<View style={styles.list}>
+			<Text style={styles.listItem}>{player}</Text>
 		</View>
 	);
 }
 
 class ViewPlayer extends Component {
+
 	state = {
-		gamelocation: '',
-		date: new Date(),
-		mode: 'date',
-		show: false,
-		yourteam: '',
-		opponent: '',
-		venue: '',
+		players: []
+	}
+
+	componentDidMount() {
+		const { login } = this.props;
+		getGame().then(user => this.setState({ players: user[login.id].players }));
+		console.log(login.id)
 	}
 
 	render() {
-		const { yourteam, opponent, venue, show, date } = this.state;
 		Moment.locale('en');
+		const { players } = this.state;
 		return (
 			<SafeAreaView style={styles.container}>
 				<FlatList
-					data={DATA}
-					renderItem={({ item }) => <Item title={item.title} style={styles.list} />}
-					keyExtractor={item => item.id}
-					style={styles.listItem}
+					data={players}
+					renderItem={({ player }) => <Item title={player.fullname} />}
+					keyExtractor={player => player.fullname}
 				/>
 			</SafeAreaView>
 		)

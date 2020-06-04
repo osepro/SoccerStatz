@@ -94,7 +94,6 @@ class AddPlayer extends Component {
 
 	render() {
 		const { fullname, position, jersey, height, weight, show, date } = this.state;
-		getGame().then(user => console.log(user));
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
