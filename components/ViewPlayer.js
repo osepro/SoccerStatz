@@ -13,7 +13,7 @@ function PlayerList(props) {
 		<ScrollView style={styles.container}>
 			{
 				props.players.map((item, i) => (
-					<TouchableOpacity key={i} onPress={() => alert('Hello ' + item.fullname)} style={styles.touchview}>
+					<TouchableOpacity key={i} style={styles.touchview}>
 						<View style={styles.item}>
 							<View style={styles.profilepix}>
 								<FontAwesome name='user-secret' size={30} color={red} />
@@ -27,7 +27,8 @@ function PlayerList(props) {
 							</View>
 						</View>
 					</TouchableOpacity>
-				))
+				)
+				)
 			}
 		</ScrollView>
 	)
@@ -47,7 +48,18 @@ class ViewPlayer extends Component {
 	render() {
 		Moment.locale('en');
 		const { players } = this.state;
-		return (<PlayerList players={players} />)
+
+		if (!players) {
+			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
+		}
+
+		if (Object.keys(players).length > 0 && players !== undefined) {
+			const newPlayersList = players.filter(Boolean);
+			return <PlayerList players={newPlayersList} />;
+		}
+
+		return (<View />)
+
 	}
 }
 

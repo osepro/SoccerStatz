@@ -1,9 +1,9 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from "react-native"
+import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native"
 import { white, orange, gray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Base64 } from 'js-base64';
-import { getUser } from "../utils/api";
+import { getUser, getGame } from "../utils/api";
 import { connect } from "react-redux";
 import { login } from "../actions/login";
 
@@ -11,6 +11,10 @@ class Login extends Component {
 	state = {
 		username: '',
 		password: '',
+	}
+
+	componentDidMount() {
+		getGame().then(user => console.log(user));
 	}
 
 	setLoginData = (input, name) => {
@@ -27,15 +31,21 @@ class Login extends Component {
 		const { username, password } = this.state;
 		const { dispatch } = this.props;
 		const encryptPassword = Base64.encode(password);
-		getUser(username, encryptPassword).then(data => {
-			if (data) {
-				dispatch(login(data[0].id, data[0].name));
-				this.props.navigation.navigate('Home')
-			}
-			else {
-				alert('😞! error invalid username/password');
-			}
-		});
+		if (username.length > 0 && password.length > 0) {
+			getUser(username, encryptPassword).then(data => {
+				if (data) {
+					dispatch(login(data[0].id, data[0].name));
+					this.props.navigation.navigate('Home')
+				}
+				else {
+					alert('😞! error invalid username/password');
+				}
+			});
+		}
+		else {
+			alert('😞! error invalid username/password is empty');
+		}
+
 	}
 
 	render() {
