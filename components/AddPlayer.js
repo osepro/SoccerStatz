@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { savePlayer, getGame } from "../utils/api";
+import { savePlayer } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addUser } from "../actions/register";
 import { connect } from "react-redux";
@@ -62,7 +62,23 @@ class AddPlayer extends Component {
 		})
 	}
 
-	handleAddGame = () => {
+	setNumbericData(input, name) {
+		let inputData = '';
+		let numbers = '0123456789';
+
+		for (var i = 0; i < input.length; i++) {
+			if (numbers.indexOf(input[i]) > -1) {
+				inputData = inputData + input[i];
+				this.setState({ [name]: input })
+			}
+			else {
+				alert("😜Please enter numbers only");
+				this.setState({ [name]: '' })
+			}
+		}
+	}
+
+	handleAddPlayer = () => {
 		const { fullname, position, jersey, height, weight, date } = this.state;
 		const { dispatch, login } = this.props;
 
@@ -70,6 +86,7 @@ class AddPlayer extends Component {
 			if (fullname === position) alert('👎 an error occured in your input data');
 			else {
 				const newPlayer = {
+					id: RandomGeneratedNumber(),
 					fullname: fullname,
 					position: position,
 					jersey: jersey,
@@ -80,7 +97,15 @@ class AddPlayer extends Component {
 				savePlayer(login.id, newPlayer).then(value => {
 					if (value) {
 						alert('👍 Player successfully added');
-						//this.props.navigation.navigate('Home');
+						//this.props.navigation.navigate('LineUp');
+						this.setState({
+							fullname: '',
+							position: '',
+							jersey: '',
+							height: '',
+							weight: '',
+							date: ''
+						})
 					}
 					else {
 						alert('👎 an error occured why adding game. Please try again')
@@ -101,7 +126,7 @@ class AddPlayer extends Component {
 					<Text style={styles.formText}>Please fill form to add player....</Text>
 					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
 					<TextInput style={styles.input} placeholder="enter position" value={position} onChangeText={(text) => this.setPlayerData(text, "position")} />
-					<TextInput style={styles.input} placeholder="enter player's jersey" value={jersey} onChangeText={(text) => this.setPlayerData(text, "jersey")} />
+					<TextInput style={styles.input} placeholder="enter player's jersey" value={jersey} onChangeText={(text) => this.setNumbericData(text, "jersey")} />
 					<TextInput style={styles.input} placeholder="enter height" value={height} onChangeText={(text) => this.setPlayerData(text, "height")} />
 					<TextInput style={styles.input} placeholder="enter weight" value={weight} onChangeText={(text) => this.setPlayerData(text, "weight")} />
 					<TouchableOpacity onPress={this.setPlayerDOB}>
@@ -116,7 +141,7 @@ class AddPlayer extends Component {
 						onConfirm={this.setDate}
 						onCancel={this.setPlayerDOB}
 					/>}
-					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
+					<TouchableOpacity style={styles.btn} onPress={this.handleAddPlayer}>
 						<Text style={styles.btnText}>Add Player</Text>
 					</TouchableOpacity>
 				</View>

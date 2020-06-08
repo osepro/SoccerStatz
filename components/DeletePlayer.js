@@ -1,60 +1,91 @@
 import React, { Component } from "react"
-import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native"
-import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
+import { View, Text, ScrollView, StyleSheet, Alert } from "react-native"
+import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { addGame, getGame } from "../utils/api";
+import { getGame } from "../utils/api";
+import { deletePlayer } from "../utils/api";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const DATA = [
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'James Dune',
-	},
-	{
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Avil Larry',
-	},
-	{
-		id: '58694a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Steven Cov',
-	},
+const deleteAction = (playerId, userid) => {
+	//const { dispatch } = this.props
+	//dispatch(delDeck(playerId));
+	deletePlayer(playerId, userid);
+	//this.props.navigation.navigate("Home");
+	alert("👍 Player successfully deleted")
+}
 
-];
+const deleteUserPlayer = (playerId, userid) => {
 
-function Item({ title }) {
-	return (
-		<View style={styles.item}>
-			<Text style={styles.title}>{title}</Text>
-		</View>
+	Alert.alert(
+		"Delect",
+		"Are you sure you want to delete player?",
+		[
+			{
+				text: "Cancel",
+				onPress: () => console.log("Cancelled"),
+				style: "cancel"
+			},
+			{ text: "Yes", onPress: () => deleteAction(playerId, userid) }
+		],
+		{ cancelable: false }
 	);
 }
 
+function PlayerList(props) {
+
+	return (
+		<ScrollView style={styles.container}>
+			{
+				props.players.map((item, i) => (
+					<TouchableOpacity key={i} onPress={() => deleteUserPlayer(item.id, props.userid)} style={styles.touchview}>
+						<View style={styles.item}>
+							<View style={styles.profilepix}>
+								<FontAwesome name='user-secret' size={30} color={red} />
+							</View>
+							<View style={styles.name}>
+								<Text style={styles.nameText}> {item.fullname}</Text>
+								<Text style={styles.positionText}> {item.position}</Text>
+							</View>
+							<View style={styles.jersey}>
+								<FontAwesome name='remove' size={30} color={red} />
+							</View>
+						</View>
+					</TouchableOpacity>
+				))
+			}
+		</ScrollView>
+	)
+}
+
 class DeletePlayer extends Component {
+
 	state = {
-		gamelocation: '',
-		date: new Date(),
-		mode: 'date',
-		show: false,
-		yourteam: '',
-		opponent: '',
-		venue: '',
+		players: []
+	}
+
+	componentDidMount() {
+		const { login } = this.props;
+		getGame().then(user => this.setState({ players: user[login.id].players }));
 	}
 
 	render() {
-		const { yourteam, opponent, venue, show, date } = this.state;
-		Moment.locale('en');
-		return (
-			<SafeAreaView style={styles.container}>
-				<FlatList
-					data={DATA}
-					renderItem={({ item }) => <Item title={item.title} style={styles.list} />}
-					keyExtractor={item => item.id}
-					style={styles.listItem}
-				/>
-			</SafeAreaView>
-		)
+		const { login } = this.props;
+		const { players } = this.state;
+
+		if (!players) {
+			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
+		}
+
+
+		if (Object.keys(players).length > 0) {
+			const newPlayersList = players.filter(Boolean);
+			return <PlayerList players={newPlayersList} userid={login.id} />;
+		}
+
+		return (<View />)
 	}
 }
 
@@ -66,7 +97,7 @@ function mapStateToProps({ login }) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 20,
+		padding: 10,
 		backgroundColor: white,
 		flex: 1
 	},
@@ -77,10 +108,61 @@ const styles = StyleSheet.create({
 	listItem: {
 		padding: 10
 	},
+	touchview: {
+		padding: 1,
+	},
 	list: {
-		padding: 40,
-		borderBottomColor: black,
-		borderWidth: 3
+		padding: 8,
+	},
+	profilepix: {
+		flex: 0.4,
+		flexDirection: "row",
+		justifyContent: "center",
+		padding: 12,
+		borderRadius: 42,
+		backgroundColor: lightgray,
+	},
+	name: {
+		flex: 2,
+		justifyContent: "center",
+		paddingLeft: 8
+	},
+	nameText: {
+		fontSize: 14,
+		fontWeight: "bold",
+		color: black,
+	},
+	positionText: {
+		color: gray,
+		marginTop: 5,
+	},
+	jersey: {
+		flex: 1,
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center"
+	},
+	jerseyText: {
+		fontSize: 20,
+		fontWeight: "bold",
+		color: blue,
+	},
+	item: {
+		flex: 1,
+		backgroundColor: white,
+		flexDirection: 'row',
+		borderRadius: Platform.OS === "ios" ? 8 : 2,
+		padding: 20,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 8,
+		shadowRadius: 3,
+		shadowOpacity: 0.8,
+		shadowColor: "rgba(0, 0, 0, 0.24)",
+		shadowOffset: {
+			width: 0,
+			height: 3
+		}
 	},
 	statusBar: {
 		flexDirection: "row",

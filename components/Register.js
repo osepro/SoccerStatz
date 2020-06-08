@@ -38,14 +38,14 @@ class Register extends Component {
 					password: Base64.encode(this.state.password.toLocaleLowerCase()),
 				}
 				saveUser(user).then(data => {
-					if (data) {
-						dispatch(addUser(user.id, user.name, user.password));
-						alert('👍account successfully created');
-						this.props.navigation.navigate('Login');
-					}
-					else {
-						alert('👎error!! username name already exist');
-					}
+					//if (data) {
+					dispatch(addUser(user.id, user.name, user.password));
+					alert('👍account successfully created');
+					this.props.navigation.navigate('Login');
+					//}
+					//else {
+					//	alert('👎error!! username name already exist');
+					//	}
 				});
 			}
 		}

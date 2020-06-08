@@ -1,12 +1,11 @@
 import { AsyncStorage } from "react-native";
 import { SOCCERSTAZ_STORAGE_KEY } from "./helpers"
+import { initSetUp } from './_initdata'
+
 import _ from 'lodash';
 
 export function getGame() {
-	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(results => {
-		const data = JSON.parse(results);
-		return data;
-	});
+	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(initSetUp);
 };
 
 export function saveUser(user) {
@@ -31,6 +30,7 @@ export function savePlayer(userid, player) {
 			...user[userid],
 			players: [...user[userid].players,
 			{
+				id: player.id,
 				fullname: player.fullname,
 				position: player.position,
 				jersey: player.jersey,
@@ -44,6 +44,20 @@ export function savePlayer(userid, player) {
 		else return false
 	});
 };
+
+export function deletePlayer(playerId, userId) {
+	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(results => {
+		let newUserPlayerData = null;
+		const UserPlayersFiltered = JSON.parse(results);
+		for (let player in UserPlayersFiltered[userId].players) {
+			if (UserPlayersFiltered[userId].players[player].id === playerId) {
+				newUserPlayerData = UserPlayersFiltered[userId].players.filter(item => item !== UserPlayersFiltered[userId].players[player]);
+				UserPlayersFiltered[userId].players = newUserPlayerData;
+			}
+		}
+		AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(UserPlayersFiltered));
+	});
+}
 
 export function addGame(userid, game) {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
