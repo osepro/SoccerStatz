@@ -47,14 +47,6 @@ class AddGame extends Component {
 		})
 	};
 
-	setMainHeader = () => {
-		const { deck } = this.props.route.params;
-		const { navigation } = this.props;
-		navigation.setOptions({
-			title: deck
-		});
-	}
-
 	setGameData = (input, name) => {
 		this.setState({
 			[name]: input

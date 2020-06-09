@@ -7,13 +7,24 @@ import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import PlayerProfile from "./PlayerProfile";
+import { createStackNavigator } from '@react-navigation/stack';
 
-function PlayerList(props) {
+
+
+const StackNavigatorConfig = {
+	headerMode: "screen"
+};
+
+const Stack = createStackNavigator();
+
+function PlayerList({ navigation, route }) {
+	const { players } = route.params;
 	return (
 		<ScrollView style={styles.container}>
 			{
-				props.players.map((item, i) => (
-					<TouchableOpacity key={i} style={styles.touchview}>
+				players.map((item, i) => (
+					<TouchableOpacity key={i} style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
 						<View style={styles.item}>
 							<View style={styles.profilepix}>
 								<FontAwesome name='user-secret' size={30} color={red} />
@@ -55,7 +66,12 @@ class ViewPlayer extends Component {
 
 		if (Object.keys(players).length > 0 && players !== undefined) {
 			const newPlayersList = players.filter(Boolean);
-			return <PlayerList players={newPlayersList} />;
+			return (
+				<Stack.Navigator initialRouteName="PlayerList" {...StackNavigatorConfig}>
+					<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'View Players', }} initialParams={{ players: newPlayersList }} />
+					<Stack.Screen name="PlayerProfile" component={PlayerProfile} />
+				</Stack.Navigator>
+			)
 		}
 
 		return (<View />)
@@ -129,7 +145,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		marginLeft: 10,
 		marginRight: 10,
-		marginTop: 8,
+		marginTop: 15,
 		shadowRadius: 3,
 		shadowOpacity: 0.8,
 		shadowColor: "rgba(0, 0, 0, 0.24)",

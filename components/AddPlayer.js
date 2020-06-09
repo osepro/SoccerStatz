@@ -48,14 +48,6 @@ class AddPlayer extends Component {
 		})
 	};
 
-	setMainHeader = () => {
-		const { deck } = this.props.route.params;
-		const { navigation } = this.props;
-		navigation.setOptions({
-			title: deck
-		});
-	}
-
 	setPlayerData = (input, name) => {
 		this.setState({
 			[name]: input
