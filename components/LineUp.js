@@ -11,10 +11,6 @@ import DragPlayers from "./DragPlayers";
 
 const image = '../assets/pitch.png';
 const player = '../assets/jersey.png';
-/*const goalKeepers = [{ no: 1, name: 'Deagea' }, { no: 1, name: 'Casillas' }, { no: 1, name: 'Buffon' }];
-const defenders = [{ no: 2, name: 'Vidic' }, { no: 5, name: 'Fred' }, { no: 2, name: 'Varane' }, { no: 5, name: 'Esien' }];
-const midfielders = [{ no: 7, name: 'Zidane' }, { no: 10, name: 'Okocha' }, { no: 20, name: 'Xavi' }, { no: 22, name: 'Iniesta' }];
-const forwards = [{ no: 7, name: 'Drogba' }, { no: 9, name: 'Messi' }, { no: 11, name: 'Neymar' }, { no: 9, name: 'Mane' }];*/
 
 class LineUp extends Component {
 
