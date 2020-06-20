@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, ScrollView, StyleSheet, Alert } from "react-native"
+import { View, Text, ScrollView, StyleSheet, Alert, FlatList, TouchableOpacity } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { getGame } from "../utils/api";
@@ -7,7 +7,6 @@ import { deletePlayer } from "../utils/api";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const deleteAction = (playerId, userid) => {
 	//const { dispatch } = this.props
@@ -35,28 +34,28 @@ const deleteUserPlayer = (playerId, userid) => {
 }
 
 function PlayerList(props) {
-
 	return (
-		<ScrollView style={styles.container}>
-			{
-				props.players.map((item, i) => (
-					<TouchableOpacity key={i} onPress={() => deleteUserPlayer(item.id, props.userid)} style={styles.touchview}>
-						<View style={styles.item}>
-							<View style={styles.profilepix}>
-								<FontAwesome name='user-secret' size={30} color={red} />
-							</View>
-							<View style={styles.name}>
-								<Text style={styles.nameText}> {item.fullname}</Text>
-								<Text style={styles.positionText}> {item.position}</Text>
-							</View>
-							<View style={styles.jersey}>
-								<FontAwesome name='remove' size={30} color={red} />
-							</View>
+		<View style={styles.container}>
+			<FlatList
+				data={props.players}
+				renderItem={({ item }) => <TouchableOpacity onPress={() => deleteUserPlayer(item.id, props.userid)} style={styles.touchview}>
+					<View style={styles.item}>
+						<View style={styles.profilepix}>
+							<FontAwesome name='user-secret' size={30} color={red} />
 						</View>
-					</TouchableOpacity>
-				))
-			}
-		</ScrollView>
+						<View style={styles.name}>
+							<Text style={styles.nameText}> {item.fullname}</Text>
+							<Text style={styles.positionText}> {item.position}</Text>
+						</View>
+						<View style={styles.jersey}>
+							<FontAwesome name='remove' size={30} color={red} />
+						</View>
+					</View>
+				</TouchableOpacity>}
+				keyExtractor={item => "" + item.id}
+			/>
+
+		</View>
 	)
 }
 

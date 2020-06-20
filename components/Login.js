@@ -14,7 +14,7 @@ class Login extends Component {
 	}
 
 	componentDidMount() {
-		getGame().then(user => console.log(user));
+		//getGame().then(user => console.log(user));
 	}
 
 	setLoginData = (input, name) => {

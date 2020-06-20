@@ -21,27 +21,26 @@ const Stack = createStackNavigator();
 function PlayerList({ navigation, route }) {
 	const { players } = route.params;
 	return (
-		<ScrollView style={styles.container}>
-			{
-				players.map((item, i) => (
-					<TouchableOpacity key={i} style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
-						<View style={styles.item}>
-							<View style={styles.profilepix}>
-								<FontAwesome name='user-secret' size={30} color={red} />
-							</View>
-							<View style={styles.name}>
-								<Text style={styles.nameText}> {item.fullname}</Text>
-								<Text style={styles.positionText}> {item.position}</Text>
-							</View>
-							<View style={styles.jersey}>
-								<Text style={styles.jerseyText}>{item.jersey}</Text>
-							</View>
+		<View style={styles.container}>
+			<FlatList
+				data={players}
+				renderItem={({ item }) => <TouchableOpacity style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
+					<View style={styles.item}>
+						<View style={styles.profilepix}>
+							<FontAwesome name='user-secret' size={30} color={red} />
 						</View>
-					</TouchableOpacity>
-				)
-				)
-			}
-		</ScrollView>
+						<View style={styles.name}>
+							<Text style={styles.nameText}> {item.fullname}</Text>
+							<Text style={styles.positionText}> {item.position}</Text>
+						</View>
+						<View style={styles.jersey}>
+							<Text style={styles.jerseyText}>{item.jersey}</Text>
+						</View>
+					</View>
+				</TouchableOpacity>}
+				keyExtractor={item => "" + item.id}
+			/>
+		</View>
 	)
 }
 
