@@ -86,7 +86,7 @@ class AddGame extends Component {
 		const { yourteam, opponent, venue, show, date } = this.state;
 		Moment.locale('en');
 		return (
-			<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<View behavior="padding" style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
 					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
@@ -113,7 +113,7 @@ class AddGame extends Component {
 						<Text style={styles.btnText}>Add Game</Text>
 					</TouchableOpacity>
 				</View>
-			</KeyboardAvoidingView>
+			</View>
 		)
 	}
 }

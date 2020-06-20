@@ -33,7 +33,8 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	navigationOptions: {
-		header: null
+		header: null,
+		swipeEnabled: false
 	},
 	tabBarOptions: {
 		activeTintColor: Platform.OS === "ios" ? orange : white,

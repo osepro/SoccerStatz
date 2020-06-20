@@ -11,11 +11,9 @@ import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
 import DeletePlayer from "./DeletePlayer"
 
-const image = '../assets/soccerstazbg.png';
-
 function HomeScreen({ navigation }) {
 	return (
-		<KeyboardAvoidingView behavior="padding" style={styles.container}>
+		<View behavior="padding" style={styles.container}>
 			<View style={styles.statusBar}>
 				<StatusBar barStyle="light-content" />
 				<View style={styles.homeContainer}>
@@ -29,17 +27,17 @@ function HomeScreen({ navigation }) {
 			<View style={styles.row}>
 				<Agenda
 					items={{
-						'2020-06-01': [{ name: 'item 1 - any js object' }],
-						'2020-06-02': [{ name: 'item 2 - any js object', height: 80 }],
-						'2020-06-03': [],
-						'2020-06-04': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
+						'2020-06-14': [{ name: 'item 1 - any js object' }],
+						'2020-06-15': [{ name: 'item 2 - any js object', height: 80 }],
+						'2020-06-16': [],
+						'2020-06-17': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
 					}}
 					onDayPress={(day) => { console.log('day pressed', day) }}
 					selected={new Date()}
 					markedDates={{
 						'2020-06-01': { marked: true },
-						'2020-06-02': { marked: true },
-						'2020-06-03': { marked: true }
+						'2020-06-14': { marked: true },
+						'2020-06-15': { marked: true }
 					}}
 					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <Text key={i} style={styles.noGame}>⚽️ {items}</Text>)}</View>); }}
 					renderDay={(day, item) => { return (<View />); }}
@@ -47,7 +45,7 @@ function HomeScreen({ navigation }) {
 					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
 				/>
 			</View>
-		</KeyboardAvoidingView>
+		</View>
 	);
 }
 
