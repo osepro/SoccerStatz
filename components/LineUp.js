@@ -18,13 +18,6 @@ class LineUp extends Component {
 		players: [],
 	}
 
-	getPlayerName = (position) => {
-		const newPosition = this.state.players.filter(player => player.position === position);
-		this.setState({
-			position: newPosition
-		})
-	}
-
 	componentDidMount() {
 		const { login } = this.props;
 		getGame().then(user => this.setState({ players: user[login.id].players }));

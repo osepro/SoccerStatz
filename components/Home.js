@@ -6,12 +6,33 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
 import { logout } from "../actions/login";
+import { getGame } from "../utils/api";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
-import DeletePlayer from "./DeletePlayer"
+import DeletePlayer from "./DeletePlayer";
+import Moment from 'moment';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation, route }) {
+	Moment.locale('en');
+
+	const gameDetails = route.params.initmatches.map(details => {
+		const dateData = Moment(details.gamedate).format('YYYY-MM-DD')
+		const team = details.team;
+		const opponent = details.opponent;
+		const venue = details.venue;
+		const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue }] }
+		return gameData;
+	})
+
+	let itemDetails = {};
+
+	for (let i = 0; i < gameDetails.length; i++) {
+		itemDetails = { ...itemDetails, ...gameDetails[i] }
+	}
+
+	console.log(itemDetails);
+
 	return (
 		<View behavior="padding" style={styles.container}>
 			<View style={styles.statusBar}>
@@ -26,12 +47,7 @@ function HomeScreen({ navigation }) {
 			</View>
 			<View style={styles.row}>
 				<Agenda
-					items={{
-						'2020-06-14': [{ name: 'item 1 - any js object' }],
-						'2020-06-15': [{ name: 'item 2 - any js object', height: 80 }],
-						'2020-06-16': [],
-						'2020-06-17': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
-					}}
+					items={itemDetails}
 					onDayPress={(day) => { console.log('day pressed', day) }}
 					selected={new Date()}
 					markedDates={{
@@ -124,10 +140,10 @@ function logOut({ navigation }) {
 
 const Drawer = createDrawerNavigator();
 
-function MyDrawer() {
+function MyDrawer(props) {
 	return (
-		<Drawer.Navigator initialRouteName="Home">
-			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} />
+		<Drawer.Navigator initialRouteName="Home" drawerType={'slide'}>
+			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} initialParams={{ initmatches: props.homematches }} />
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
@@ -142,12 +158,21 @@ class Home extends Component {
 	state = {
 		username: '',
 		password: '',
+		matches: [],
+	}
+
+	componentDidMount() {
+		const { login } = this.props;
+		getGame().then(user => this.setState({ matches: user[login.id].matches }));
 	}
 
 	render() {
-		return (
-			<MyDrawer />
-		)
+		if (this.state.matches.length > 0) {
+			return (
+				<MyDrawer homematches={this.state.matches} />
+			)
+		}
+		return <View />
 	}
 }
 
