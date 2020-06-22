@@ -55,7 +55,7 @@ function HomeScreen({ navigation, route }) {
 						'2020-06-14': { marked: true },
 						'2020-06-15': { marked: true }
 					}}
-					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <Text key={i} style={styles.noGame}>⚽️ {items}</Text>)}</View>); }}
+					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignSelf: "center" }} key={i}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{items}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>)}</View>); }}
 					renderDay={(day, item) => { return (<View />); }}
 					renderKnob={() => { return (<View />); }}
 					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
@@ -195,6 +195,17 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		paddingTop: 40,
 		paddingBottom: 20,
+	},
+	gameavailable: {
+		fontWeight: "bold",
+		color: gray,
+		fontSize: 18,
+		justifyContent: "center",
+		alignSelf: "center"
+	},
+	soccerball: {
+		fontSize: 25,
+		padding: 10,
 	},
 	row: {
 		flex: 1,
