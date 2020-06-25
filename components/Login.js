@@ -13,10 +13,6 @@ class Login extends Component {
 		password: '',
 	}
 
-	componentDidMount() {
-		//getGame().then(user => console.log(user));
-	}
-
 	setLoginData = (input, name) => {
 		this.setState({
 			[name]: input

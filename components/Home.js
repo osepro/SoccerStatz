@@ -12,6 +12,7 @@ import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
 import DeletePlayer from "./DeletePlayer";
 import Moment from 'moment';
+import { addgame } from "../actions/addgame";
 
 function HomeScreen({ navigation, route }) {
 	Moment.locale('en');
@@ -30,8 +31,6 @@ function HomeScreen({ navigation, route }) {
 	for (let i = 0; i < gameDetails.length; i++) {
 		itemDetails = { ...itemDetails, ...gameDetails[i] }
 	}
-
-	console.log(itemDetails);
 
 	return (
 		<View behavior="padding" style={styles.container}>
@@ -58,7 +57,7 @@ function HomeScreen({ navigation, route }) {
 					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignSelf: "center" }} key={i}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{items}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>)}</View>); }}
 					renderDay={(day, item) => { return (<View />); }}
 					renderKnob={() => { return (<View />); }}
-					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
+					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /> No game today</Text></View>); }}
 				/>
 			</View>
 		</View>
@@ -158,18 +157,14 @@ class Home extends Component {
 	state = {
 		username: '',
 		password: '',
-		matches: [],
-	}
-
-	componentDidMount() {
-		const { login } = this.props;
-		getGame().then(user => this.setState({ matches: user[login.id].matches }));
 	}
 
 	render() {
-		if (this.state.matches.length > 0) {
+		const { addgame, login } = this.props;
+
+		if (login.matches) {
 			return (
-				<MyDrawer homematches={this.state.matches} />
+				<MyDrawer homematches={login.matches} />
 			)
 		}
 		return <View />
@@ -178,7 +173,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ login }) => {
 	return {
-		login
+		login,
 	}
 }
 
