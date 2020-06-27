@@ -5,7 +5,7 @@ import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } fr
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import { logout } from "../actions/login";
+import { logout, home } from "../actions/login";
 import { getGame } from "../utils/api";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
@@ -131,7 +131,8 @@ function deletePlayer({ navigation }) {
 function logOut({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Text>Are you sure you want to Log Out</Text>
+			<Text>Are you sure you want to Log Out 😢</Text>
+			<Button onPress={() => navigation.navigate('Home')} title="Cancel" />
 			<Button onPress={() => navigation.navigate('Login')} title="Log Out" />
 		</View>
 	)
@@ -159,8 +160,13 @@ class Home extends Component {
 		password: '',
 	}
 
+	componentDidMount() {
+		const { login, dispatch } = this.props;
+		dispatch(home(login.id));
+	}
+
 	render() {
-		const { addgame, login } = this.props;
+		const { login } = this.props;
 
 		if (login.matches) {
 			return (

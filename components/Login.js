@@ -30,7 +30,7 @@ class Login extends Component {
 		if (username.length > 0 && password.length > 0) {
 			getUser(username, encryptPassword).then(data => {
 				if (data) {
-					dispatch(login(data[0].id, data[0].name));
+					dispatch(login(data[0].id));
 					this.props.navigation.navigate('Home')
 				}
 				else {

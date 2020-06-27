@@ -22,6 +22,7 @@ let initData = {
 				"jersey": "10",
 				"position": "Midfielder",
 				"weight": "190",
+				dateofbirth: "2020-06-28",
 			},
 		],
 	},

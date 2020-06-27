@@ -1,41 +1,35 @@
 import React, { Component } from "react"
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList } from "react-native";
 import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect } from "react-redux";
-import Moment from 'moment';
-import PlayerProfile from "./PlayerProfile";
-import PlayerList from "./PlayerList";
-import { createStackNavigator } from '@react-navigation/stack';
 
-
-
-const StackNavigatorConfig = {
-	headerMode: "screen"
-};
-
-const Stack = createStackNavigator();
-
-class ViewPlayer extends Component {
-
-	componentDidMount() {
-		const { login } = this.props;
-		this.setState({
-			playersupdate: login.players.length
-		})
-	}
-
+class PlayerList extends Component {
 	render() {
-		Moment.locale('en');
-		const { login } = this.props;
-
-		if (!login.players) {
-			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
-		}
+		const { navigation, login } = this.props;
 		return (
-			<Stack.Navigator initialRouteName="PlayerList" {...StackNavigatorConfig}>
-				<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'View Players', }} />
-				<Stack.Screen name="PlayerProfile" component={PlayerProfile} />
-			</Stack.Navigator>
+			<View style={styles.container}>
+				<FlatList
+					data={login.players}
+					renderItem={({ item }) => <TouchableOpacity style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
+						<View style={styles.item}>
+							<View style={styles.profilepix}>
+								<FontAwesome name='user-secret' size={30} color={red} />
+							</View>
+							<View style={styles.name}>
+								<Text style={styles.nameText}> {item.fullname}</Text>
+								<Text style={styles.positionText}> {item.position}</Text>
+							</View>
+							<View style={styles.jersey}>
+								<Text style={styles.jerseyText}>{item.jersey}</Text>
+							</View>
+						</View>
+					</TouchableOpacity>}
+					keyExtractor={item => "" + item.id}
+				/>
+			</View>
+
 		)
 	}
 }
@@ -127,4 +121,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default connect(mapStateToProps)(ViewPlayer);
+export default connect(mapStateToProps)(PlayerList);

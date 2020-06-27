@@ -36,7 +36,7 @@ export function savePlayer(userid, player) {
 				jersey: player.jersey,
 				height: player.height,
 				weight: player.weight,
-				dateofbirth: player.date,
+				dateofbirth: player.dateofbirth,
 			}
 			]
 		};
