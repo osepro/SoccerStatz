@@ -48,11 +48,14 @@ export function savePlayer(userid, player) {
 export function deletePlayer(playerId, userId) {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(results => {
 		let newUserPlayerData = null;
+
 		const UserPlayersFiltered = JSON.parse(results);
+
 		for (let player in UserPlayersFiltered[userId].players) {
 			if (UserPlayersFiltered[userId].players[player].id === playerId) {
 				newUserPlayerData = UserPlayersFiltered[userId].players.filter(item => item !== UserPlayersFiltered[userId].players[player]);
 				UserPlayersFiltered[userId].players = newUserPlayerData;
+				break;
 			}
 		}
 		AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(UserPlayersFiltered));

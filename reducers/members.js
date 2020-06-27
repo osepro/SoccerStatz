@@ -8,7 +8,7 @@ function members(state = {}, action) {
 				[action.username]: {
 					id: action.id,
 					username: action.username,
-					password: action.password
+					password: action.password,
 				}
 			}
 		default:

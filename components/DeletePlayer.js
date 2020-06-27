@@ -7,31 +7,7 @@ import { deletePlayer } from "../utils/api";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import Moment from 'moment';
-
-const deleteAction = (playerId, userid) => {
-	//const { dispatch } = this.props
-	//dispatch(delDeck(playerId));
-	deletePlayer(playerId, userid);
-	//this.props.navigation.navigate("Home");
-	alert("👍 Player successfully deleted")
-}
-
-const deleteUserPlayer = (playerId, userid) => {
-
-	Alert.alert(
-		"Delect",
-		"Are you sure you want to delete player?",
-		[
-			{
-				text: "Cancel",
-				onPress: () => console.log("Cancelled"),
-				style: "cancel"
-			},
-			{ text: "Yes", onPress: () => deleteAction(playerId, userid) }
-		],
-		{ cancelable: false }
-	);
-}
+import { deleteuserplayer } from "../actions/login"
 
 function PlayerList(props) {
 	return (
@@ -61,30 +37,60 @@ function PlayerList(props) {
 
 class DeletePlayer extends Component {
 
-	state = {
-		players: []
+	deleteAction = (playerId, userid) => {
+		const { dispatch } = this.props;
+		deletePlayer(playerId, userid)
+		dispatch(deleteuserplayer(playerId));
+		alert("👍 Player successfully deleted");
 	}
 
-	componentDidMount() {
-		const { login } = this.props;
-		getGame().then(user => this.setState({ players: user[login.id].players }));
+	deleteUserPlayer = (playerId, userid) => {
+
+		Alert.alert(
+			"Delect",
+			"Are you sure you want to delete player?",
+			[
+				{
+					text: "Cancel",
+					onPress: () => console.log("Cancelled"),
+					style: "cancel"
+				},
+				{ text: "Yes", onPress: () => this.deleteAction(playerId, userid) }
+			],
+			{ cancelable: false }
+		);
 	}
 
 	render() {
 		const { login } = this.props;
-		const { players } = this.state;
 
-		if (!players) {
+		if (!login.players) {
 			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
 		}
 
+		return (
+			<View style={styles.container}>
+				<FlatList
+					data={login.players}
+					renderItem={({ item }) => <TouchableOpacity onPress={() => this.deleteUserPlayer(item.id, login.id)} style={styles.touchview}>
+						<View style={styles.item}>
+							<View style={styles.profilepix}>
+								<FontAwesome name='user-secret' size={30} color={red} />
+							</View>
+							<View style={styles.name}>
+								<Text style={styles.nameText}> {item.fullname}</Text>
+								<Text style={styles.positionText}> {item.position}</Text>
+							</View>
+							<View style={styles.jersey}>
+								<FontAwesome name='remove' size={30} color={red} />
+							</View>
+						</View>
+					</TouchableOpacity>}
+					keyExtractor={item => "" + item.id}
+				/>
 
-		if (Object.keys(players).length > 0) {
-			const newPlayersList = players.filter(Boolean);
-			return <PlayerList players={newPlayersList} userid={login.id} />;
-		}
-
-		return (<View />)
+			</View>
+		)
 	}
 }
 
