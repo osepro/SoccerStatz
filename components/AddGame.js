@@ -5,10 +5,9 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { addGame } from "../utils/api";
 import { addgame } from "../actions/login";
 import { connect } from "react-redux";
-import { Base64 } from 'js-base64';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 class AddGame extends Component {
 	state = {
@@ -24,11 +23,23 @@ class AddGame extends Component {
 		this.setState({ gamelocation })
 	}
 
-	onChange = (event, selectedDate) => {
-		const currentDate = selectedDate || date;
+	onChange = () => {
 		this.setState({
 			show: true,
-			date: currentDate
+		})
+	};
+
+	showDatepicker = () => {
+		this.setState({
+			show: !this.state.show,
+			mode: 'date'
+		})
+	};
+
+	showTimepicker = () => {
+		this.setState({
+			show: !this.state.show,
+			mode: 'time'
 		})
 	};
 
@@ -39,6 +50,13 @@ class AddGame extends Component {
 	}
 
 	setDate = (selectedDate) => {
+		this.setState({
+			show: !this.state.show,
+			date: selectedDate
+		})
+	};
+
+	setTime = (selectedDate) => {
 		this.setState({
 			show: !this.state.show,
 			date: selectedDate
@@ -87,12 +105,8 @@ class AddGame extends Component {
 
 
 	render() {
-		const { yourteam, opponent, venue, show, date } = this.state;
-		const { login } = this.props;
+		const { yourteam, opponent, venue, show, date, mode } = this.state;
 
-		//console.log(login.matches)
-
-		Moment.locale('en');
 		return (
 			<View behavior="padding" style={styles.container}>
 				<View style={styles.statusBar}>
@@ -104,18 +118,25 @@ class AddGame extends Component {
 					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
 					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
 					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
-					<TouchableOpacity onPress={this.setGameDate}>
+					<TouchableOpacity onPress={this.showDatepicker}>
 						<Text style={styles.textLabel}>
 							<Text>📅 Set game date: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
+					<TouchableOpacity onPress={this.showTimepicker}>
+						<Text style={styles.textLabel}>
+							<Text>⏲ Set game time: </Text>
+							<Text style={styles.dateSeleted}>{Moment(date).format('hh:mm:ss A')}</Text>
+						</Text>
+					</TouchableOpacity>
 					{<DateTimePickerModal
 						isVisible={show}
-						mode="date"
+						mode={mode}
 						onConfirm={this.setDate}
 						onCancel={this.setGameDate}
-						minimumDate={new Date()}
+						minimumDate={date}
+						onChange={this.onChange}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
 						<Text style={styles.btnText}>Add Game</Text>

@@ -1,26 +1,40 @@
 import React, { Component, Fragment } from "react"
 import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar } from "react-native"
 import { connect } from "react-redux";
-import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
+import { white, orange, lightgray, green, black, gray, blue, red, lightBlue, semilightgray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { Agenda } from 'react-native-calendars';
-import { logout, home } from "../actions/login";
+import { Agenda } from "react-native-calendars";
 import UserName from "./UserName";
-import Moment from 'moment';
+import Moment from "moment";
+
+const colorrDay = [white, orange, lightgray, green, black, gray, blue, red, lightBlue];
 
 class HomeScreen extends Component {
+
+	renderItem(item) {
+		return (
+			<View style={styles.item}>
+				<View style={styles.itemDay}><Text style={styles.itemMonthText}>{Moment(item.gamedate).format("MMM")}</Text><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
+				<View style={styles.itemDisplay}>
+					<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
+					<Text style={styles.gamevenue}>{item.venue}</Text>
+					<Text style={styles.gamevenue}>{item.gametime}</Text>
+				</View>
+			</View>
+		);
+	}
+
 	render() {
 		Moment.locale('en');
 		const { navigation, login } = this.props;
 
-		console.log(login.matches);
-
 		const gameDetails = login.matches.map(details => {
-			const dateData = Moment(details.gamedate).format('YYYY-MM-DD')
+			const dateData = Moment(details.gamedate).format("YYYY-MM-DD");
+			const dateTimeData = Moment(details.gamedate).format("hh:mm:ss A");
 			const team = details.team;
 			const opponent = details.opponent;
 			const venue = details.venue;
-			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData }] }
+			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData, gametime: dateTimeData }] }
 			return gameData;
 		})
 
@@ -31,8 +45,6 @@ class HomeScreen extends Component {
 		for (let i = 0; i < gameDetails.length; i++) {
 			itemDetails = { ...itemDetails, ...gameDetails[i] }
 		}
-
-		console.log(itemDetails);
 
 		return (
 			<View behavior="padding" style={styles.container}>
@@ -49,17 +61,17 @@ class HomeScreen extends Component {
 				<View style={styles.row}>
 					<Agenda
 						items={itemDetails}
-						onDayPress={(day) => { console.log('day pressed', day) }}
+						onDayPress={(day) => { return (<View />); }}
 						selected={new Date()}
 						markedDates={{
 							'2020-06-01': { marked: true },
 							'2020-06-14': { marked: true },
 							'2020-06-15': { marked: true }
 						}}
-						renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignSelf: "center" }} key={i}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{items}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>)}</View>); }}
+						renderItem={this.renderItem.bind(this)}
 						renderDay={(day, item) => { return (<View />) }}
 						renderKnob={() => { return (<View />); }}
-						renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /> No game today</Text></View>); }}
+						renderEmptyData={() => { return (<View style={styles.itemNoGame}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={red} style={styles.soccerball} /> No upcoming games</Text></View>); }}
 					/>
 				</View>
 			</View>
@@ -94,6 +106,13 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignSelf: "center"
 	},
+	gamevenue: {
+		fontWeight: "bold",
+		color: semilightgray,
+		fontSize: 14,
+		justifyContent: "center",
+		alignSelf: "center"
+	},
 	soccerball: {
 		fontSize: 25,
 		padding: 10,
@@ -108,7 +127,11 @@ const styles = StyleSheet.create({
 		color: orange
 	},
 	noGame: {
-		color: orange,
+		fontWeight: "bold",
+		color: semilightgray,
+		fontSize: 24,
+		justifyContent: "center",
+		alignSelf: "center"
 	},
 	homeContainer: {
 		flexWrap: "wrap",
@@ -128,10 +151,33 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
 		padding: 10,
 	},
+	itemDisplay: {
+		flexDirection: "column",
+		flexWrap: "wrap",
+		alignSelf: "center",
+		justifyContent: "flex-end",
+		paddingBottom: 40
+	},
+	itemDay: {
+		alignSelf: "flex-end",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		backgroundColor: orange,
+		padding: 5,
+	},
+	itemMonthText: {
+		color: white,
+		fontWeight: "bold",
+		fontSize: 12,
+	},
+	itemDayText: {
+		color: white,
+		fontWeight: "bold",
+		fontSize: 18,
+	},
 	item: {
 		backgroundColor: white,
 		borderRadius: Platform.OS === "ios" ? 5 : 2,
-		padding: 20,
 		marginLeft: 10,
 		marginRight: 10,
 		marginTop: 17,
@@ -142,7 +188,23 @@ const styles = StyleSheet.create({
 		shadowOffset: {
 			width: 0,
 			height: 3
-		}
+		},
+	},
+	itemNoGame: {
+		backgroundColor: white,
+		borderRadius: Platform.OS === "ios" ? 5 : 2,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 17,
+		justifyContent: "center",
+		shadowRadius: 3,
+		shadowOpacity: 0.8,
+		shadowColor: "rgba(0, 0, 0, 0.24)",
+		shadowOffset: {
+			width: 0,
+			height: 3
+		},
+		padding: 20,
 	},
 	register: {
 		alignItems: "center"
