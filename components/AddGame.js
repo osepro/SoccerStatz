@@ -2,9 +2,8 @@ import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { addGame, getGame } from "../utils/api";
-import { RandomGeneratedNumber } from "../utils/helpers";
-import { addUser } from "../actions/register";
+import { addGame } from "../utils/api";
+import { addgame } from "../actions/login";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -40,7 +39,6 @@ class AddGame extends Component {
 	}
 
 	setDate = (selectedDate) => {
-		//const currentDate = selectedDate || this.state.date;
 		this.setState({
 			show: !this.state.show,
 			date: selectedDate
@@ -70,6 +68,12 @@ class AddGame extends Component {
 				addGame(login.id, gameDetails).then(value => {
 					if (value) {
 						alert('⚽️ Game successfully added');
+						dispatch(addgame(gameDetails));
+						this.setState({
+							yourteam: '',
+							opponent: '',
+							venue: '',
+						})
 						this.props.navigation.navigate('Home');
 					}
 					else {
@@ -84,6 +88,10 @@ class AddGame extends Component {
 
 	render() {
 		const { yourteam, opponent, venue, show, date } = this.state;
+		const { login } = this.props;
+
+		//console.log(login.matches)
+
 		Moment.locale('en');
 		return (
 			<View behavior="padding" style={styles.container}>

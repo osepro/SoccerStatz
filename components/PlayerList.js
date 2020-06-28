@@ -1,78 +1,18 @@
 import React, { Component } from "react"
-import { View, Text, ScrollView, StyleSheet, Alert, FlatList, TouchableOpacity } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList } from "react-native";
 import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { getGame } from "../utils/api";
-import { deletePlayer } from "../utils/api";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect } from "react-redux";
-import { Base64 } from 'js-base64';
-import Moment from 'moment';
-import { deleteuserplayer } from "../actions/login"
 
-function PlayerList(props) {
-	return (
-		<View style={styles.container}>
-			<FlatList
-				data={props.players}
-				renderItem={({ item }) => <TouchableOpacity onPress={() => deleteUserPlayer(item.id, props.userid)} style={styles.touchview}>
-					<View style={styles.item}>
-						<View style={styles.profilepix}>
-							<FontAwesome name='user-secret' size={30} color={red} />
-						</View>
-						<View style={styles.name}>
-							<Text style={styles.nameText}> {item.fullname}</Text>
-							<Text style={styles.positionText}> {item.position}</Text>
-						</View>
-						<View style={styles.jersey}>
-							<FontAwesome name='remove' size={30} color={red} />
-						</View>
-					</View>
-				</TouchableOpacity>}
-				keyExtractor={item => "" + item.id}
-			/>
-
-		</View>
-	)
-}
-
-class DeletePlayer extends Component {
-
-	deleteAction = (playerId, userid) => {
-		const { dispatch } = this.props;
-		deletePlayer(playerId, userid)
-		dispatch(deleteuserplayer(playerId));
-		alert("👍 Player successfully deleted");
-	}
-
-	deleteUserPlayer = (playerId, userid) => {
-
-		Alert.alert(
-			"Delect",
-			"Are you sure you want to delete player?",
-			[
-				{
-					text: "Cancel",
-					onPress: () => console.log("Cancelled"),
-					style: "cancel"
-				},
-				{ text: "Yes", onPress: () => this.deleteAction(playerId, userid) }
-			],
-			{ cancelable: false }
-		);
-	}
-
+class PlayerList extends Component {
 	render() {
-		const { login } = this.props;
-
-		if (!login.players) {
-			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
-		}
-
+		const { navigation, login } = this.props;
 		return (
 			<View style={styles.container}>
 				<FlatList
 					data={login.players}
-					renderItem={({ item }) => <TouchableOpacity onPress={() => this.deleteUserPlayer(item.id, login.id)} style={styles.touchview}>
+					renderItem={({ item }) => <TouchableOpacity style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
 						<View style={styles.item}>
 							<View style={styles.profilepix}>
 								<FontAwesome name='user-secret' size={30} color={red} />
@@ -82,14 +22,14 @@ class DeletePlayer extends Component {
 								<Text style={styles.positionText}> {item.position}</Text>
 							</View>
 							<View style={styles.jersey}>
-								<FontAwesome name='remove' size={30} color={red} />
+								<Text style={styles.jerseyText}>{item.jersey}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>}
 					keyExtractor={item => "" + item.id}
 				/>
-
 			</View>
+
 		)
 	}
 }
@@ -160,7 +100,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		marginLeft: 10,
 		marginRight: 10,
-		marginTop: 8,
+		marginTop: 15,
 		shadowRadius: 3,
 		shadowOpacity: 0.8,
 		shadowColor: "rgba(0, 0, 0, 0.24)",
@@ -181,4 +121,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default connect(mapStateToProps)(DeletePlayer);
+export default connect(mapStateToProps)(PlayerList);

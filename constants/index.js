@@ -1,6 +1,9 @@
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
+export const HOME = "HOME";
 export const REGISTER = "REGISTER";
 export const ADD_GAME = "ADD_GAME";
 export const VIEW_GAME = "VIEW_GAME";
 export const DEL_GAME = "DEL_GAME";
+export const DEL_PLAYER = "DEL_PLAYER";
+export const ADD_PLAYER = "ADD_PLAYER";

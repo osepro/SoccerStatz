@@ -5,67 +5,15 @@ import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } fr
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Agenda } from 'react-native-calendars';
-import { logout } from "../actions/login";
+import { logout, home } from "../actions/login";
 import { getGame } from "../utils/api";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
+import HomeScreen from "./HomeScreen";
 import DeletePlayer from "./DeletePlayer";
 import Moment from 'moment';
-
-function HomeScreen({ navigation, route }) {
-	Moment.locale('en');
-
-	const gameDetails = route.params.initmatches.map(details => {
-		const dateData = Moment(details.gamedate).format('YYYY-MM-DD')
-		const team = details.team;
-		const opponent = details.opponent;
-		const venue = details.venue;
-		const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue }] }
-		return gameData;
-	})
-
-	let itemDetails = {};
-
-	for (let i = 0; i < gameDetails.length; i++) {
-		itemDetails = { ...itemDetails, ...gameDetails[i] }
-	}
-
-	console.log(itemDetails);
-
-	return (
-		<View behavior="padding" style={styles.container}>
-			<View style={styles.statusBar}>
-				<StatusBar barStyle="light-content" />
-				<View style={styles.homeContainer}>
-					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-						<FontAwesome name='navicon' size={30} color={gray} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				<Text style={styles.initTxt}><UserName /></Text>
-			</View>
-			<View style={styles.row}>
-				<Agenda
-					items={itemDetails}
-					onDayPress={(day) => { console.log('day pressed', day) }}
-					selected={new Date()}
-					markedDates={{
-						'2020-06-01': { marked: true },
-						'2020-06-14': { marked: true },
-						'2020-06-15': { marked: true }
-					}}
-					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <Text key={i} style={styles.noGame}>⚽️ {items}</Text>)}</View>); }}
-					renderDay={(day, item) => { return (<View />); }}
-					renderKnob={() => { return (<View />); }}
-					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}>⚽️ No game today</Text></View>); }}
-				/>
-			</View>
-		</View>
-	);
-}
-
-
+import { addgame } from "../actions/addgame";
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -132,7 +80,8 @@ function deletePlayer({ navigation }) {
 function logOut({ navigation }) {
 	return (
 		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Text>Are you sure you want to Log Out</Text>
+			<Text>Are you sure you want to Log Out 😢</Text>
+			<Button onPress={() => navigation.navigate('Home')} title="Cancel" />
 			<Button onPress={() => navigation.navigate('Login')} title="Log Out" />
 		</View>
 	)
@@ -143,7 +92,7 @@ const Drawer = createDrawerNavigator();
 function MyDrawer(props) {
 	return (
 		<Drawer.Navigator initialRouteName="Home" drawerType={'slide'}>
-			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} initialParams={{ initmatches: props.homematches }} />
+			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} />
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
@@ -158,18 +107,19 @@ class Home extends Component {
 	state = {
 		username: '',
 		password: '',
-		matches: [],
 	}
 
 	componentDidMount() {
-		const { login } = this.props;
-		getGame().then(user => this.setState({ matches: user[login.id].matches }));
+		const { login, dispatch } = this.props;
+		dispatch(home(login.id));
 	}
 
 	render() {
-		if (this.state.matches.length > 0) {
+		const { login } = this.props;
+
+		if (login.matches) {
 			return (
-				<MyDrawer homematches={this.state.matches} />
+				<MyDrawer homematches={login.matches} />
 			)
 		}
 		return <View />
@@ -178,7 +128,7 @@ class Home extends Component {
 
 const mapStateToProps = ({ login }) => {
 	return {
-		login
+		login,
 	}
 }
 
@@ -195,6 +145,17 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		paddingTop: 40,
 		paddingBottom: 20,
+	},
+	gameavailable: {
+		fontWeight: "bold",
+		color: gray,
+		fontSize: 18,
+		justifyContent: "center",
+		alignSelf: "center"
+	},
+	soccerball: {
+		fontSize: 25,
+		padding: 10,
 	},
 	row: {
 		flex: 1,

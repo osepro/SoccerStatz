@@ -1,13 +1,10 @@
 import React, { Component } from "react"
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { getGame } from "../utils/api";
 import { connect } from "react-redux";
-import { Base64 } from 'js-base64';
 import Moment from 'moment';
-import { TouchableOpacity } from "react-native-gesture-handler";
 import PlayerProfile from "./PlayerProfile";
+import PlayerList from "./PlayerList";
 import { createStackNavigator } from '@react-navigation/stack';
 
 
@@ -18,63 +15,28 @@ const StackNavigatorConfig = {
 
 const Stack = createStackNavigator();
 
-function PlayerList({ navigation, route }) {
-	const { players } = route.params;
-	return (
-		<View style={styles.container}>
-			<FlatList
-				data={players}
-				renderItem={({ item }) => <TouchableOpacity style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
-					<View style={styles.item}>
-						<View style={styles.profilepix}>
-							<FontAwesome name='user-secret' size={30} color={red} />
-						</View>
-						<View style={styles.name}>
-							<Text style={styles.nameText}> {item.fullname}</Text>
-							<Text style={styles.positionText}> {item.position}</Text>
-						</View>
-						<View style={styles.jersey}>
-							<Text style={styles.jerseyText}>{item.jersey}</Text>
-						</View>
-					</View>
-				</TouchableOpacity>}
-				keyExtractor={item => "" + item.id}
-			/>
-		</View>
-	)
-}
-
 class ViewPlayer extends Component {
-
-	state = {
-		players: []
-	}
 
 	componentDidMount() {
 		const { login } = this.props;
-		getGame().then(user => this.setState({ players: user[login.id].players }));
+		this.setState({
+			playersupdate: login.players.length
+		})
 	}
 
 	render() {
 		Moment.locale('en');
-		const { players } = this.state;
+		const { login } = this.props;
 
-		if (!players) {
+		if (!login.players) {
 			return (<View style={styles.container}><Text style={styles.nameText}> 👎 No players currently added. Please add players </Text></View>)
 		}
-
-		if (Object.keys(players).length > 0 && players !== undefined) {
-			const newPlayersList = players.filter(Boolean);
-			return (
-				<Stack.Navigator initialRouteName="PlayerList" {...StackNavigatorConfig}>
-					<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'View Players', }} initialParams={{ players: newPlayersList }} />
-					<Stack.Screen name="PlayerProfile" component={PlayerProfile} />
-				</Stack.Navigator>
-			)
-		}
-
-		return (<View />)
-
+		return (
+			<Stack.Navigator initialRouteName="PlayerList" {...StackNavigatorConfig}>
+				<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'View Players', }} />
+				<Stack.Screen name="PlayerProfile" component={PlayerProfile} />
+			</Stack.Navigator>
+		)
 	}
 }
 

@@ -19,8 +19,7 @@ class LineUp extends Component {
 	}
 
 	componentDidMount() {
-		const { login } = this.props;
-		getGame().then(user => this.setState({ players: user[login.id].players }));
+
 	}
 
 	render() {
@@ -28,8 +27,9 @@ class LineUp extends Component {
 		let forwards = [];
 		let keepers = [];
 		let defenders = [];
+		const { login } = this.props;
 
-		this.state.players.map(player => {
+		login.players.map(player => {
 			switch (player.position) {
 				case 'Midfielder':
 					midfielders = [...midfielders, { name: player.fullname, no: player.jersey }];

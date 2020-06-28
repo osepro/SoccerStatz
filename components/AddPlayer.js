@@ -4,7 +4,7 @@ import { white, orange, green, black, gray, blue, lightgray, lightBlue } from ".
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { savePlayer } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
-import { addUser } from "../actions/register";
+import { addplayer } from "../actions/login";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -78,18 +78,18 @@ class AddPlayer extends Component {
 			if (fullname === position) alert('👎 an error occured in your input data');
 			else {
 				const newPlayer = {
-					id: RandomGeneratedNumber(),
-					fullname: fullname,
-					position: position,
-					jersey: jersey,
-					height: height,
-					weight: weight,
 					dateofbirth: date,
+					fullname: fullname,
+					height: height,
+					id: RandomGeneratedNumber(),
+					jersey: jersey,
+					position: position,
+					weight: weight,
 				}
 				savePlayer(login.id, newPlayer).then(value => {
 					if (value) {
+						dispatch(addplayer(newPlayer));
 						alert('👍 Player successfully added');
-						//this.props.navigation.navigate('LineUp');
 						this.setState({
 							fullname: '',
 							position: '',
@@ -111,6 +111,7 @@ class AddPlayer extends Component {
 
 	render() {
 		const { fullname, position, jersey, height, weight, show, date } = this.state;
+		const newYear = new Date().getFullYear() - 5;
 		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -124,7 +125,7 @@ class AddPlayer extends Component {
 					<TouchableOpacity onPress={this.setPlayerDOB}>
 						<Text style={styles.textLabel}>
 							<Text>📅 choose player's DOB: </Text>
-							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
+							<Text style={styles.dateSeleted}>{Moment(new Date(newYear, 0, 1)).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
 					{<DateTimePickerModal
@@ -132,6 +133,7 @@ class AddPlayer extends Component {
 						mode="date"
 						onConfirm={this.setDate}
 						onCancel={this.setPlayerDOB}
+						maximumDate={new Date(newYear, 0, 1)}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddPlayer}>
 						<Text style={styles.btnText}>Add Player</Text>
