@@ -15,12 +15,12 @@ class HomeScreen extends Component {
 	renderItem(item) {
 		return (
 			<View style={styles.item}>
+				<View style={styles.itemDay}><Text style={styles.itemMonthText}>{Moment(item.gamedate).format("MMM")}</Text><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
 				<View style={styles.itemDisplay}>
 					<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
 					<Text style={styles.gamevenue}>{item.venue}</Text>
 					<Text style={styles.gamevenue}>{item.gametime}</Text>
 				</View>
-				<View style={styles.itemDay}><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
 			</View>
 		);
 	}
@@ -72,7 +72,7 @@ class HomeScreen extends Component {
 						renderItem={this.renderItem.bind(this)}
 						renderDay={(day, item) => { return (<View />) }}
 						renderKnob={() => { return (<View />); }}
-						renderEmptyData={() => { return (<View style={styles.itemNoGame}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /> No game today</Text></View>); }}
+						renderEmptyData={() => { return (<View style={styles.itemNoGame}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={red} style={styles.soccerball} /> No upcoming games</Text></View>); }}
 					/>
 				</View>
 			</View>
@@ -156,10 +156,8 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		flexWrap: "wrap",
 		alignSelf: "center",
-		alignItems: "center",
 		justifyContent: "flex-end",
-		flex: 1,
-		padding: 5,
+		paddingBottom: 40
 	},
 	itemDay: {
 		alignSelf: "flex-end",
@@ -167,6 +165,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: orange,
 		padding: 5,
+	},
+	itemMonthText: {
+		color: white,
+		fontWeight: "bold",
+		fontSize: 12,
 	},
 	itemDayText: {
 		color: white,
