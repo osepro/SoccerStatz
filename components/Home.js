@@ -10,61 +10,10 @@ import { getGame } from "../utils/api";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
+import HomeScreen from "./HomeScreen";
 import DeletePlayer from "./DeletePlayer";
 import Moment from 'moment';
 import { addgame } from "../actions/addgame";
-
-function HomeScreen({ navigation, route }) {
-	Moment.locale('en');
-
-	const gameDetails = route.params.initmatches.map(details => {
-		const dateData = Moment(details.gamedate).format('YYYY-MM-DD')
-		const team = details.team;
-		const opponent = details.opponent;
-		const venue = details.venue;
-		const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue }] }
-		return gameData;
-	})
-
-	let itemDetails = {};
-
-	for (let i = 0; i < gameDetails.length; i++) {
-		itemDetails = { ...itemDetails, ...gameDetails[i] }
-	}
-
-	return (
-		<View behavior="padding" style={styles.container}>
-			<View style={styles.statusBar}>
-				<StatusBar barStyle="light-content" />
-				<View style={styles.homeContainer}>
-					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-						<FontAwesome name='navicon' size={30} color={gray} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				<Text style={styles.initTxt}><UserName /></Text>
-			</View>
-			<View style={styles.row}>
-				<Agenda
-					items={itemDetails}
-					onDayPress={(day) => { console.log('day pressed', day) }}
-					selected={new Date()}
-					markedDates={{
-						'2020-06-01': { marked: true },
-						'2020-06-14': { marked: true },
-						'2020-06-15': { marked: true }
-					}}
-					renderItem={(item, firstItemInDay) => { return (<View style={styles.item}>{Object.values(item).map((items, i) => <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignSelf: "center" }} key={i}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{items}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>)}</View>); }}
-					renderDay={(day, item) => { return (<View />); }}
-					renderKnob={() => { return (<View />); }}
-					renderEmptyData={() => { return (<View style={styles.item}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /> No game today</Text></View>); }}
-				/>
-			</View>
-		</View>
-	);
-}
-
-
 
 function NotificationsScreen({ navigation }) {
 	return (
@@ -143,7 +92,7 @@ const Drawer = createDrawerNavigator();
 function MyDrawer(props) {
 	return (
 		<Drawer.Navigator initialRouteName="Home" drawerType={'slide'}>
-			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} initialParams={{ initmatches: props.homematches }} />
+			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} />
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
