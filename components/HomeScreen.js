@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue, semilightgray } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Agenda } from "react-native-calendars";
-import { logout, home } from "../actions/login";
 import UserName from "./UserName";
 import Moment from "moment";
 

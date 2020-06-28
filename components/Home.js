@@ -4,24 +4,12 @@ import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Agenda } from 'react-native-calendars';
-import { logout, home } from "../actions/login";
-import { getGame } from "../utils/api";
+import { home } from "../actions/login";
 import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
 import HomeScreen from "./HomeScreen";
 import DeletePlayer from "./DeletePlayer";
-import Moment from 'moment';
-import { addgame } from "../actions/addgame";
-
-function NotificationsScreen({ navigation }) {
-	return (
-		<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-			<Button onPress={() => navigation.goBack()} title="Go back home" />
-		</View>
-	);
-}
 
 function addPlayer({ navigation }) {
 	return (

@@ -1,10 +1,7 @@
 import React, { Component } from "react"
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Alert } from "react-native"
+import { View, Text, StyleSheet, StatusBar, ImageBackground } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { addGame, getGame } from "../utils/api";
-import { RandomGeneratedNumber } from "../utils/helpers";
-import { addUser } from "../actions/register";
+import { FontAwesome } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import DragPlayers from "./DragPlayers";
 

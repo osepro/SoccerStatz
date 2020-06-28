@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList } from "react-native"
+import { View, Text, StyleSheet } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue, red } from "../utils/colors";
 import { connect } from "react-redux";
 import Moment from 'moment';
