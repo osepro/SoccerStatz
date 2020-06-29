@@ -24,6 +24,7 @@ class LineUp extends Component {
 		let forwards = [];
 		let keepers = [];
 		let defenders = [];
+		let wingers = [];
 		const { login } = this.props;
 
 		login.players.map(player => {
@@ -39,6 +40,8 @@ class LineUp extends Component {
 					break;
 				case 'Keeper':
 					keepers = [...keepers, { name: player.fullname, no: player.jersey }];
+				case 'Winger':
+					wingers = [...wingers, { name: player.fullname, no: player.jersey }];
 					break;
 				default:
 					console.log('No data found');
@@ -76,6 +79,14 @@ class LineUp extends Component {
 						{
 							midfielders.map((midfielder, i) => (
 								<DragPlayers key={i} no={midfielder.no} name={midfielder.name} />
+							))
+						}
+					</View>
+					<View style={styles.lineupplayers}>
+						<Text style={styles.playerHeader}>Winger</Text>
+						{
+							wingers.map((winger, i) => (
+								<DragPlayers key={i} no={winger.no} name={winger.name} />
 							))
 						}
 					</View>
