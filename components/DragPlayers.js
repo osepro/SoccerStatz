@@ -35,11 +35,11 @@ class DragPlayers extends Component {
 			onPanResponderRelease: (e, gesture) => {
 				if (this.isDropArea(gesture)) {
 					Animated.timing(this.state.opacity, {
-						toValue: 0,
+						toValue: 1,
 						duration: 1000
 					}).start(() =>
 						this.setState({
-							showDraggable: false
+							showDraggable: true
 						})
 					);
 				}

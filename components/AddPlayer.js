@@ -6,10 +6,9 @@ import { savePlayer } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addplayer } from "../actions/login";
 import { connect } from "react-redux";
-import { Base64 } from 'js-base64';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import RNPickerSelect from 'react-native-picker-select';
 
 class AddPlayer extends Component {
 	state = {
@@ -108,24 +107,44 @@ class AddPlayer extends Component {
 		else alert('😏 compulsory fields empty');
 	}
 
+	setPosition = (value) => {
+		this.setState({
+			position: value
+		})
+	}
+
 
 	render() {
-		const { fullname, position, jersey, height, weight, show, date } = this.state;
+		const { fullname, jersey, height, weight, show, date } = this.state;
 		const newYear = new Date().getFullYear() - 5;
-		Moment.locale('en');
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
 					<Text style={styles.formText}>Please fill form to add player....</Text>
 					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
-					<TextInput style={styles.input} placeholder="enter position" value={position} onChangeText={(text) => this.setPlayerData(text, "position")} />
+					<View style={styles.input}>
+						<RNPickerSelect
+							onValueChange={(value) => this.setPosition(value)}
+							items={[
+								{ label: 'Defender', value: 'Defender' },
+								{ label: 'Forward', value: 'Forward' },
+								{ label: 'Keeper', value: 'Keeper' },
+								{ label: 'Midfielder', value: 'Midfielder' },
+								{ label: 'Winger', value: 'Winger' },
+							]}
+							style={{ fontSize: 25, fontWeight: "bold" }}
+							placeholder={{ label: "Select player's position", value: null }}
+						/>
+					</View>
+
 					<TextInput style={styles.input} placeholder="enter player's jersey" value={jersey} onChangeText={(text) => this.setNumbericData(text, "jersey")} />
 					<TextInput style={styles.input} placeholder="enter height" value={height} onChangeText={(text) => this.setPlayerData(text, "height")} />
 					<TextInput style={styles.input} placeholder="enter weight" value={weight} onChangeText={(text) => this.setPlayerData(text, "weight")} />
+
 					<TouchableOpacity onPress={this.setPlayerDOB}>
 						<Text style={styles.textLabel}>
 							<Text>📅 choose player's DOB: </Text>
-							<Text style={styles.dateSeleted}>{Moment(new Date(newYear, 0, 1)).format('MM-DD-YYYY')}</Text>
+							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
 					{<DateTimePickerModal
