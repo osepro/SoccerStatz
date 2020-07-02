@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, PanResponder, Animated, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, PanResponder, Animated, ImageBackground, Modal, TouchableOpacity, } from "react-native";
 import { black } from "../utils/colors";
 
 const player = '../assets/jersey.png';
@@ -14,6 +14,8 @@ class DragPlayers extends Component {
 			dropAreaValues: null,
 			pan: new Animated.ValueXY(),
 			opacity: new Animated.Value(1),
+			modalVisible: false,
+			playerDetails: ''
 		};
 
 		this._val = { x: 0, y: 0 }
@@ -47,6 +49,12 @@ class DragPlayers extends Component {
 		});
 	}
 
+	setModalVisible = () => {
+		this.setState({
+			modalVisible: !this.state.modalVisible,
+		});
+	}
+
 	isDropArea(gesture) {
 		return gesture.moveY < 200;
 	}
@@ -64,10 +72,33 @@ class DragPlayers extends Component {
 			transform: this.state.pan.getTranslateTransform()
 		}
 
+		const { modalVisible, playerDetails } = this.state;
+
 		const { no, name } = this.props;
 		if (this.state.showDraggable) {
 			return (
 				<View style={{ position: "relative", }}>
+					<Modal
+						animationType="slide"
+						transparent={true}
+						visible={modalVisible}
+						onRequestClose={() => {
+							Alert.alert("Modal has been closed.");
+						}}
+					>
+						<View style={styles.centeredView}>
+							<View style={styles.modalView}>
+								<Text style={styles.modalText}>Hello World!</Text>
+
+								<TouchableOpacity
+									style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+									onPress={this.setModalVisible}
+								>
+									<Text style={styles.textStyle}>Hide Modal</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</Modal>
 					<Animated.View
 						{...this.panResponder.panHandlers}
 						style={[panStyle, { opacity: this.state.opacity }, styles.pitchItems]
@@ -78,6 +109,12 @@ class DragPlayers extends Component {
 								<Text style={styles.playername}>{name}</Text>
 								<Text style={styles.playernumber}>{no}</Text>
 							</ImageBackground>
+							<TouchableOpacity
+								style={styles.openButton}
+								onPress={this.setModalVisible}
+							>
+								<Text>↗️</Text>
+							</TouchableOpacity>
 						</View>
 					</Animated.View>
 				</View>
@@ -94,6 +131,42 @@ DragPlayers.propTypes = {
 const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row"
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 22
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: "white",
+		borderRadius: 20,
+		padding: 35,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5
+	},
+	openButton: {
+		backgroundColor: "#F194FF",
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2
+	},
+	textStyle: {
+		color: "white",
+		fontWeight: "bold",
+		textAlign: "center"
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: "center"
 	},
 	dropZone: {
 		height: 200,

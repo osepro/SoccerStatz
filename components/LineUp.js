@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, StyleSheet, StatusBar, ImageBackground } from "react-native"
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Modal, TouchableOpacity, Alert } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -13,10 +13,6 @@ class LineUp extends Component {
 
 	state = {
 		players: [],
-	}
-
-	componentDidMount() {
-
 	}
 
 	render() {
@@ -53,6 +49,7 @@ class LineUp extends Component {
 					<StatusBar barStyle="light-content" />
 					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
 				</View>
+
 				<View style={styles.row}>
 					<ImageBackground source={require(image)} style={styles.image}>
 					</ImageBackground>
@@ -78,6 +75,7 @@ class LineUp extends Component {
 						<Text style={styles.playerHeader}>Midfielders</Text>
 						{
 							midfielders.map((midfielder, i) => (
+
 								<DragPlayers key={i} no={midfielder.no} name={midfielder.name} />
 							))
 						}
@@ -95,6 +93,7 @@ class LineUp extends Component {
 						{
 							forwards.map((forward, i) => (
 								<DragPlayers key={i} no={forward.no} name={forward.name} />
+
 							))
 						}
 					</View>
