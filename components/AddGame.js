@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, KeyboardAvoidingView } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { addGame } from "../utils/api";
@@ -7,6 +7,7 @@ import { addgame } from "../actions/login";
 import { connect } from "react-redux";
 import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import UserName from "./UserName";
 
 
 class AddGame extends Component {
@@ -108,10 +109,12 @@ class AddGame extends Component {
 		const { yourteam, opponent, venue, show, date, mode } = this.state;
 
 		return (
-			<View behavior="padding" style={styles.container}>
+			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
+
 					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+					<Text style={styles.initTxt}><UserName /></Text>
 				</View>
 				<View style={styles.row}>
 					<Text style={styles.formText}>Please fill form to add game....</Text>
@@ -142,7 +145,7 @@ class AddGame extends Component {
 						<Text style={styles.btnText}>Add Game</Text>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		)
 	}
 }
@@ -172,6 +175,13 @@ const styles = StyleSheet.create({
 		paddingTop: 40,
 		paddingBottom: 20,
 		justifyContent: "center"
+	},
+	initTxt: {
+		backgroundColor: lightBlue,
+		color: white,
+		fontWeight: "bold",
+		borderRadius: 15,
+		padding: 10,
 	},
 	homeTitle: {
 		fontSize: 25,

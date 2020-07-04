@@ -1,11 +1,13 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native"
-import { white, orange, gray } from "../utils/colors";
+import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
+import { white, orange, gray, blue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Base64 } from 'js-base64';
 import { getUser, getGame } from "../utils/api";
 import { connect } from "react-redux";
 import { login } from "../actions/login";
+
+const logo = '../assets/logo.png';
 
 class Login extends Component {
 	state = {
@@ -21,6 +23,10 @@ class Login extends Component {
 
 	register = () => {
 		this.props.navigation.navigate('Register')
+	}
+
+	componentDidMount() {
+		getGame().then(data => console.log('Data loaded successfully'))
 	}
 
 	handleLogin = () => {
@@ -49,7 +55,8 @@ class Login extends Component {
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
-					<Text style={styles.titletext}>SoccerStatz <FontAwesome name='soccer-ball-o' size={30} color={gray} /></Text>
+					<ImageBackground source={require(logo)} style={styles.player} />
+					<Text style={styles.titletext}>SoccerStatz</Text>
 					<TextInput style={styles.input} placeholder="Enter username" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
 					<TextInput style={styles.input} placeholder="Enter password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
 					<TouchableOpacity style={styles.btn} onPress={this.handleLogin}>
@@ -74,11 +81,20 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 	},
+	player: {
+		padding: 10,
+		marginRight: 10,
+		width: 100,
+		height: 80,
+		alignSelf: "center",
+	},
 	titletext: {
-		fontSize: 35,
+		fontSize: 25,
 		justifyContent: "center",
 		textAlign: "center",
-		color: orange
+		color: gray,
+		textTransform: "uppercase",
+		fontWeight: "bold",
 	},
 	register: {
 		alignItems: "center"
@@ -107,7 +123,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	btn: {
-		backgroundColor: gray,
+		backgroundColor: blue,
 		padding: 15,
 		paddingLeft: 80,
 		paddingRight: 80,

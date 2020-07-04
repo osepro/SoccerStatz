@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER } from "../constants";
+import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER, UPDATE_PLAYER_STATS } from "../constants";
 
 function login(state = {}, action) {
 	switch (action.type) {
@@ -24,6 +24,31 @@ function login(state = {}, action) {
 				...state,
 				players: newPlayers
 			}
+		case UPDATE_PLAYER_STATS:
+			const player = state.players.filter(player => player.id === action.playerid);
+			const newPlayer = state.players.filter(player => player.id !== action.playerid);
+			const updatePlayer = {
+				"assists": action.updatedDetails.assists,
+				"dateofbirth": player[0].dateofbirth,
+				"freekicks": action.updatedDetails.freekicks,
+				"fullname": player[0].fullname,
+				"goals": action.updatedDetails.goals,
+				"height": player[0].height,
+				"id": player[0].id,
+				"jersey": player[0].jersey,
+				"matchesplayes": action.updatedDetails.matchesplayes,
+				"passes": action.updatedDetails.passes,
+				"position": player[0].position,
+				"shots": action.updatedDetails.shots,
+				"weight": player[0].weight,
+
+			}
+			const newPlayerUpdate = [...newPlayer, updatePlayer];
+			return {
+				...state,
+				players: newPlayerUpdate
+			}
+
 		case DEL_PLAYER: {
 			const updatedPlayers = state.players.filter(player => player.id !== action.playerid)
 			return {

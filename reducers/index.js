@@ -1,11 +1,9 @@
 import { combineReducers } from "redux";
 import members from "./members";
-import login from "./login"
-import addgame from "./addgame"
+import login from "./login";
 
 
 export default combineReducers({
 	members,
 	login,
-	addgame,
 });

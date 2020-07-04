@@ -84,6 +84,12 @@ class AddPlayer extends Component {
 					jersey: jersey,
 					position: position,
 					weight: weight,
+					matchesplayes: 0,
+					goals: 0,
+					assists: 0,
+					passes: 0,
+					shots: 0,
+					freekicks: 0,
 				}
 				savePlayer(login.id, newPlayer).then(value => {
 					if (value) {
@@ -118,7 +124,7 @@ class AddPlayer extends Component {
 		const { fullname, jersey, height, weight, show, date } = this.state;
 		const newYear = new Date().getFullYear() - 5;
 		return (
-			<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<KeyboardAvoidingView behavior="margin" style={styles.container}>
 				<View style={styles.row}>
 					<Text style={styles.formText}>Please fill form to add player....</Text>
 					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
@@ -173,21 +179,11 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 20,
 		backgroundColor: white,
-		flex: 1
+		flex: 1,
 	},
 	row: {
 		flex: 1,
-		justifyContent: "center"
-	},
-	statusBar: {
-		flexDirection: "row",
-		backgroundColor: white,
-		paddingLeft: 20,
-		borderBottomColor: lightgray,
-		borderBottomWidth: 1,
-		paddingTop: 40,
-		paddingBottom: 20,
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 	homeTitle: {
 		fontSize: 25,
@@ -210,7 +206,7 @@ const styles = StyleSheet.create({
 		paddingRight: 80,
 		borderRadius: 5,
 		marginTop: 20,
-		marginBottom: 30,
+		marginBottom: 50
 	},
 	btnText: {
 		color: "#FFFFFF",
