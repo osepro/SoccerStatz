@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER } from "../constants";
+import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER, UPDATE_PLAYER_STATS } from "../constants";
 import { getGame, deletePlayer } from "../utils/api";
 import { exp } from "react-native-reanimated";
 
@@ -33,6 +33,18 @@ export function addgame(gamedetails) {
 export function addplayer(playersdetails) {
 	return (dispatch) => {
 		dispatch({ type: ADD_PLAYER, playersdetails })
+	}
+}
+
+export function updateplayerstats(playerid, updatedDetails) {
+	return (dispatch) => {
+		dispatch(
+			{
+				type: UPDATE_PLAYER_STATS,
+				playerid,
+				updatedDetails,
+			}
+		)
 	}
 }
 

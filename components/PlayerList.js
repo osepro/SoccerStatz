@@ -15,7 +15,7 @@ class PlayerList extends Component {
 					renderItem={({ item }) => <TouchableOpacity style={styles.touchview} onPress={() => navigation.navigate('PlayerProfile', { playerid: item.id, playername: item.fullname })}>
 						<View style={styles.item}>
 							<View style={styles.profilepix}>
-								<FontAwesome name='user-secret' size={30} color={red} />
+								<FontAwesome name='user-o' size={30} color={red} />
 							</View>
 							<View style={styles.name}>
 								<Text style={styles.nameText}> {item.fullname}</Text>

@@ -4,10 +4,10 @@ import { white, orange, green, black, gray, blue, lightgray, lightBlue } from ".
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import DragPlayers from "./DragPlayers";
+import UserName from "./UserName";
 
 
 const image = '../assets/pitch.png';
-const player = '../assets/jersey.png';
 
 class LineUp extends Component {
 
@@ -26,18 +26,18 @@ class LineUp extends Component {
 		login.players.map(player => {
 			switch (player.position) {
 				case 'Midfielder':
-					midfielders = [...midfielders, { name: player.fullname, no: player.jersey }];
+					midfielders = [...midfielders, { name: player.fullname, no: player.jersey, id: player.id }];
 					break;
 				case 'Forward':
-					forwards = [...forwards, { name: player.fullname, no: player.jersey }];
+					forwards = [...forwards, { name: player.fullname, no: player.jersey, id: player.id }];
 					break;
 				case 'Defender':
-					defenders = [...defenders, { name: player.fullname, no: player.jersey }];
+					defenders = [...defenders, { name: player.fullname, no: player.jersey, id: player.id }];
 					break;
 				case 'Keeper':
-					keepers = [...keepers, { name: player.fullname, no: player.jersey }];
+					keepers = [...keepers, { name: player.fullname, no: player.jersey, id: player.id }];
 				case 'Winger':
-					wingers = [...wingers, { name: player.fullname, no: player.jersey }];
+					wingers = [...wingers, { name: player.fullname, no: player.jersey, id: player.id }];
 					break;
 				default:
 					console.log('No data found');
@@ -48,6 +48,7 @@ class LineUp extends Component {
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
 					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
+					<Text style={styles.initTxt}><UserName /></Text>
 				</View>
 
 				<View style={styles.row}>
@@ -59,7 +60,7 @@ class LineUp extends Component {
 						<Text style={styles.playerHeader}>Keepers</Text>
 						{
 							keepers.map((goalkeeper, i) => (
-								<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} />
+								<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} id={goalkeeper.id} />
 							))
 						}
 					</View>
@@ -67,7 +68,7 @@ class LineUp extends Component {
 						<Text style={styles.playerHeader}>Defenders</Text>
 						{
 							defenders.map((defender, i) => (
-								<DragPlayers key={i} no={defender.no} name={defender.name} />
+								<DragPlayers key={i} no={defender.no} name={defender.name} id={defender.id} />
 							))
 						}
 					</View>
@@ -76,7 +77,7 @@ class LineUp extends Component {
 						{
 							midfielders.map((midfielder, i) => (
 
-								<DragPlayers key={i} no={midfielder.no} name={midfielder.name} />
+								<DragPlayers key={i} no={midfielder.no} name={midfielder.name} id={midfielder.id} />
 							))
 						}
 					</View>
@@ -84,7 +85,7 @@ class LineUp extends Component {
 						<Text style={styles.playerHeader}>Winger</Text>
 						{
 							wingers.map((winger, i) => (
-								<DragPlayers key={i} no={winger.no} name={winger.name} />
+								<DragPlayers key={i} no={winger.no} name={winger.name} id={winger.id} />
 							))
 						}
 					</View>
@@ -92,8 +93,7 @@ class LineUp extends Component {
 						<Text style={styles.playerHeader}>Forward</Text>
 						{
 							forwards.map((forward, i) => (
-								<DragPlayers key={i} no={forward.no} name={forward.name} />
-
+								<DragPlayers key={i} no={forward.no} name={forward.name} id={forward.id} />
 							))
 						}
 					</View>
@@ -132,6 +132,13 @@ const styles = StyleSheet.create({
 	},
 	lineupplayers: {
 
+	},
+	initTxt: {
+		backgroundColor: lightBlue,
+		color: white,
+		fontWeight: "bold",
+		borderRadius: 15,
+		padding: 10,
 	},
 	pitchItems: {
 		justifyContent: "flex-end",

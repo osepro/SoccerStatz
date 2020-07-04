@@ -37,8 +37,46 @@ export function savePlayer(userid, player) {
 				height: player.height,
 				weight: player.weight,
 				dateofbirth: player.dateofbirth,
+				matchesplayes: 0,
+				goals: 0,
+				assists: 0,
+				passes: 0,
+				shots: 0,
+				freekicks: 0,
 			}
 			]
+		};
+		if (AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user))) return true;
+		else return false
+	});
+};
+
+export function savePlayerStats(userid, playerid, updatedDetails) {
+	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
+		const user = JSON.parse(users);
+		const player = user[userid].players.filter(player => player.id === playerid);
+		const updatePlayer = {
+			"assists": updatedDetails.assists,
+			"dateofbirth": player[0].dateofbirth,
+			"freekicks": updatedDetails.freekicks,
+			"fullname": player[0].fullname,
+			"goals": updatedDetails.goals,
+			"height": player[0].height,
+			"id": player[0].id,
+			"jersey": player[0].jersey,
+			"matchesplayes": updatedDetails.matchesplayes,
+			"passes": updatedDetails.passes,
+			"position": player[0].position,
+			"shots": updatedDetails.shots,
+			"weight": player[0].weight,
+
+		}
+
+		const newPlayer = user[userid].players.filter(player => player.id !== playerid);
+
+		user[userid] = {
+			...user[userid],
+			players: [...newPlayer, updatePlayer]
 		};
 		if (AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user))) return true;
 		else return false

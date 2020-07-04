@@ -25,7 +25,6 @@ class HomeScreen extends Component {
 	}
 
 	render() {
-		Moment.locale('en');
 		const { navigation, login } = this.props;
 
 		const gameDetails = login.matches.map(details => {
