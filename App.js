@@ -6,28 +6,29 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from '@react-navigation/native';
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { white, orange, lightgray, green, black, gray, blue, red } from "./utils/colors";
+import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "./utils/colors";
 import Home from "./components/Home";
 import AddGame from "./components/AddGame";
 import LineUp from "./components/LineUp";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const RouteConfigs = {
 	Home: {
 		name: "Home",
 		component: Home,
-		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-home' size={20} color={tintColor} />, title: 'Home' }
+		options: { tabBarIcon: ({ color }) => <Ionicons name='ios-home' size={20} color={color} />, title: 'Home' }
 	},
 	AddGame: {
 		name: "Add Game",
 		component: AddGame,
-		options: { tabBarIcon: ({ tintColor }) => <Ionicons name='ios-football' size={20} color={tintColor} />, title: 'Add Game' }
+		options: { tabBarIcon: ({ color }) => <Ionicons name='ios-football' size={20} color={color} />, title: 'Add Game' }
 	},
 	LineUp: {
 		component: LineUp,
 		name: "Line Up",
-		options: { tabBarIcon: ({ tintColor }) => <FontAwesome name='clipboard' size={20} color={tintColor} />, title: 'Line Up' }
+		options: { tabBarIcon: ({ color }) => <FontAwesome name='shirtsinbulk' size={20} color={color} />, title: 'Line Up' }
 	}
 }
 
@@ -37,7 +38,7 @@ const TabNavigatorConfig = {
 		swipeEnabled: false
 	},
 	tabBarOptions: {
-		activeTintColor: Platform.OS === "ios" ? orange : white,
+		activeTintColor: lightBlue,
 		style: {
 			height: 86,
 			backgroundColor: Platform.OS === "ios" ? white : lightgray,

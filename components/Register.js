@@ -1,12 +1,14 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from "react-native"
-import { white, orange, green, black, gray } from "../utils/colors";
+import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
+import { white, orange, green, black, gray, blue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { saveUser, getUser } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
 import { addUser } from "../actions/register";
 import { connect } from "react-redux";
 import { Base64 } from 'js-base64';
+
+const logo = '../assets/logo.png';
 
 class Register extends Component {
 	state = {
@@ -60,6 +62,7 @@ class Register extends Component {
 		return (
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
+					<ImageBackground source={require(logo)} style={styles.player} />
 					<Text style={styles.titletext}>SoccerStatz <FontAwesome name='soccer-ball-o' size={30} color={gray} /></Text>
 					<TextInput style={styles.input} placeholder="Enter username" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
 					<TextInput style={styles.input} placeholder="Enter password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
@@ -87,10 +90,12 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	titletext: {
-		fontSize: 35,
+		fontSize: 25,
 		justifyContent: "center",
 		textAlign: "center",
-		color: orange
+		color: gray,
+		textTransform: "uppercase",
+		fontWeight: "bold",
 	},
 	register: {
 		alignItems: "center"
@@ -98,6 +103,13 @@ const styles = StyleSheet.create({
 	registerText: {
 		color: gray,
 		fontSize: 12,
+	},
+	player: {
+		padding: 10,
+		marginRight: 10,
+		width: 100,
+		height: 80,
+		alignSelf: "center",
 	},
 	fillbelow: {
 		color: "#FF0000",
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	btn: {
-		backgroundColor: gray,
+		backgroundColor: blue,
 		padding: 15,
 		paddingLeft: 80,
 		paddingRight: 80,

@@ -112,24 +112,24 @@ class AddGame extends Component {
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
-
-					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-					<Text style={styles.initTxt}><UserName /></Text>
+					<Text style={styles.homeTitle}>S<FontAwesome name='soccer-ball-o' size={25} color={orange} />ccerStaz</Text>
+					<View style={styles.initTxt}><UserName /></View>
 				</View>
 				<View style={styles.row}>
-					<Text style={styles.formText}>Please fill form to add game....</Text>
+					<Text style={styles.formHeader}>Add a new Game</Text>
+					<Text style={styles.formText}>Please fill form below to add a new game....</Text>
 					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
 					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
 					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
 					<TouchableOpacity onPress={this.showDatepicker}>
 						<Text style={styles.textLabel}>
-							<Text>📅 Set game date: </Text>
+							<Text><FontAwesome name='calendar' size={22} color={lightBlue} /> Set game date: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={this.showTimepicker}>
 						<Text style={styles.textLabel}>
-							<Text>⏲ Set game time: </Text>
+							<Text><FontAwesome name='clock-o' size={22} color={lightBlue} /> Set game time: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('hh:mm:ss A')}</Text>
 						</Text>
 					</TouchableOpacity>
@@ -142,7 +142,7 @@ class AddGame extends Component {
 						onChange={this.onChange}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddGame}>
-						<Text style={styles.btnText}>Add Game</Text>
+						<Text style={styles.btnText}>ADD GAME</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -158,13 +158,14 @@ function mapStateToProps({ login }) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 20,
 		backgroundColor: white,
 		flex: 1
 	},
 	row: {
 		flex: 1,
-		justifyContent: "center"
+		justifyContent: "center",
+		paddingLeft: 40,
+		paddingRight: 40,
 	},
 	statusBar: {
 		flexDirection: "row",
@@ -178,21 +179,25 @@ const styles = StyleSheet.create({
 	},
 	initTxt: {
 		backgroundColor: lightBlue,
-		color: white,
-		fontWeight: "bold",
-		borderRadius: 15,
-		padding: 10,
+		borderRadius: 25,
+		padding: 8,
 	},
 	homeTitle: {
 		fontSize: 25,
-		color: orange,
+		color: gray,
 		textAlign: "center",
-		width: '70%'
+		width: '70%',
+		textTransform: "uppercase",
+		fontWeight: "bold",
 	},
 	formText: {
-		fontSize: 20,
+		fontSize: 18,
 		color: gray,
 		marginTop: 15
+	},
+	formHeader: {
+		fontSize: 32,
+		color: black,
 	},
 	dateSeleted: {
 		color: gray
@@ -208,8 +213,9 @@ const styles = StyleSheet.create({
 	},
 	btnText: {
 		color: "#FFFFFF",
-		fontSize: 18,
-		textAlign: "center"
+		fontSize: 25,
+		textAlign: "center",
+		fontWeight: "bold",
 	},
 	homeContainer: {
 		flexWrap: "wrap",

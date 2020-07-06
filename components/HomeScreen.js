@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react"
-import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar } from "react-native"
+import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity } from "react-native"
 import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue, semilightgray } from "../utils/colors";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Agenda } from "react-native-calendars";
-import UserName from "./UserName";
+import MainStatusBar from "./StatusBar";
 import Moment from "moment";
 
 const colorrDay = [white, orange, lightgray, green, black, gray, blue, red, lightBlue];
@@ -47,16 +47,7 @@ class HomeScreen extends Component {
 
 		return (
 			<View behavior="padding" style={styles.container}>
-				<View style={styles.statusBar}>
-					<StatusBar barStyle="light-content" />
-					<View style={styles.homeContainer}>
-						<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-							<FontAwesome name='navicon' size={30} color={gray} />
-						</TouchableOpacity>
-					</View>
-					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-					<Text style={styles.initTxt}><UserName /></Text>
-				</View>
+				<MainStatusBar navigation={navigation} />
 				<View style={styles.row}>
 					<Agenda
 						items={itemDetails}
@@ -70,7 +61,7 @@ class HomeScreen extends Component {
 						renderItem={this.renderItem.bind(this)}
 						renderDay={(day, item) => { return (<View />) }}
 						renderKnob={() => { return (<View />); }}
-						renderEmptyData={() => { return (<View style={styles.itemNoGame}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={red} style={styles.soccerball} /> No upcoming games</Text></View>); }}
+						renderEmptyData={() => { return (<View style={styles.itemNoGame}><Text style={styles.noGame}><Ionicons name='ios-football' size={20} color={gray} style={styles.soccerball} /> No upcoming games</Text></View>); }}
 					/>
 				</View>
 			</View>
@@ -136,19 +127,6 @@ const styles = StyleSheet.create({
 		flexWrap: "wrap",
 		justifyContent: "flex-start",
 		width: '10%'
-	},
-	homeTitle: {
-		fontSize: 25,
-		color: orange,
-		textAlign: "center",
-		width: '70%'
-	},
-	initTxt: {
-		backgroundColor: lightBlue,
-		color: white,
-		fontWeight: "bold",
-		borderRadius: 15,
-		padding: 10,
 	},
 	itemDisplay: {
 		flexDirection: "column",

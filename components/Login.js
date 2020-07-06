@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
-import { white, orange, gray, blue } from "../utils/colors";
+import { white, orange, gray, blue, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Base64 } from 'js-base64';
 import { getUser, getGame } from "../utils/api";
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	btn: {
-		backgroundColor: blue,
+		backgroundColor: lightBlue,
 		padding: 15,
 		paddingLeft: 80,
 		paddingRight: 80,
