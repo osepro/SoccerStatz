@@ -126,7 +126,8 @@ class AddPlayer extends Component {
 		return (
 			<KeyboardAvoidingView behavior="margin" style={styles.container}>
 				<View style={styles.row}>
-					<Text style={styles.formText}>Please fill form to add player....</Text>
+					<Text style={styles.formHeader}>Add a new player</Text>
+					<Text style={styles.formText}>Please fill form below to add a new Player....</Text>
 					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
 					<View style={styles.input}>
 						<RNPickerSelect
@@ -149,7 +150,7 @@ class AddPlayer extends Component {
 
 					<TouchableOpacity onPress={this.setPlayerDOB}>
 						<Text style={styles.textLabel}>
-							<Text>📅 choose player's DOB: </Text>
+							<Text><FontAwesome name='calendar' size={22} color={lightBlue} /> Choose DOB: </Text>
 							<Text style={styles.dateSeleted}>{Moment(date).format('MM-DD-YYYY')}</Text>
 						</Text>
 					</TouchableOpacity>
@@ -161,7 +162,7 @@ class AddPlayer extends Component {
 						maximumDate={new Date(newYear, 0, 1)}
 					/>}
 					<TouchableOpacity style={styles.btn} onPress={this.handleAddPlayer}>
-						<Text style={styles.btnText}>Add Player</Text>
+						<Text style={styles.btnText}>ADD PLAYER</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -177,13 +178,14 @@ function mapStateToProps({ login }) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 20,
 		backgroundColor: white,
 		flex: 1,
 	},
 	row: {
 		flex: 1,
 		justifyContent: "center",
+		paddingLeft: 40,
+		paddingRight: 40,
 	},
 	homeTitle: {
 		fontSize: 25,
@@ -192,9 +194,13 @@ const styles = StyleSheet.create({
 		width: '70%'
 	},
 	formText: {
-		fontSize: 20,
+		fontSize: 18,
 		color: gray,
 		marginTop: 15
+	},
+	formHeader: {
+		fontSize: 32,
+		color: black,
 	},
 	dateSeleted: {
 		color: gray
@@ -210,8 +216,9 @@ const styles = StyleSheet.create({
 	},
 	btnText: {
 		color: "#FFFFFF",
-		fontSize: 18,
-		textAlign: "center"
+		fontSize: 25,
+		textAlign: "center",
+		fontWeight: "bold",
 	},
 	homeContainer: {
 		flexWrap: "wrap",

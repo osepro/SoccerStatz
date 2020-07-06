@@ -75,7 +75,7 @@ class DeletePlayer extends Component {
 					renderItem={({ item }) => <TouchableOpacity onPress={() => this.deleteUserPlayer(item.id, login.id)} style={styles.touchview}>
 						<View style={styles.item}>
 							<View style={styles.profilepix}>
-								<FontAwesome name='user-secret' size={30} color={red} />
+								<FontAwesome name='user-o' size={30} color={red} />
 							</View>
 							<View style={styles.name}>
 								<Text style={styles.nameText}> {item.fullname}</Text>

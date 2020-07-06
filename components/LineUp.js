@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Modal, TouchableOpacity, Alert } from "react-native"
+import { View, Text, StyleSheet, StatusBar, ImageBackground, SafeAreaView, ScrollView } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from "react-redux";
@@ -47,14 +47,15 @@ class LineUp extends Component {
 			<View style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
-					<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-					<Text style={styles.initTxt}><UserName /></Text>
+					<Text style={styles.homeTitle}>S<FontAwesome name='soccer-ball-o' size={25} color={orange} />ccerStaz</Text>
+					<View style={styles.initTxt}><UserName /></View>
 				</View>
 
 				<View style={styles.row}>
 					<ImageBackground source={require(image)} style={styles.image}>
 					</ImageBackground>
 				</View>
+
 				<View style={styles.lineup}>
 					<View style={styles.lineupplayers}>
 						<Text style={styles.playerHeader}>Keepers</Text>
@@ -98,6 +99,7 @@ class LineUp extends Component {
 						}
 					</View>
 				</View>
+
 			</View>
 		)
 	}
@@ -105,23 +107,27 @@ class LineUp extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 20,
 		backgroundColor: white,
 		flex: 1
 	},
+
 	animated: {
 		width: "100%",
 	},
 	row: {
 		flex: 1,
 		marginTop: 10,
+		padding: 20,
 	},
 	lineup: {
 		flex: 0.5,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		marginTop: 8,
+		paddingLeft: 20,
+		paddingRight: 20,
 	},
+
 	image: {
 		flex: 1,
 		flexDirection: "row",
@@ -151,6 +157,7 @@ const styles = StyleSheet.create({
 	},
 	playerHeader: {
 		fontWeight: "bold",
+		color: gray,
 	},
 	statusBar: {
 		flexDirection: "row",
@@ -164,9 +171,16 @@ const styles = StyleSheet.create({
 	},
 	homeTitle: {
 		fontSize: 25,
-		color: orange,
+		color: gray,
 		textAlign: "center",
-		width: '70%'
+		width: '70%',
+		textTransform: "uppercase",
+		fontWeight: "bold",
+	},
+	initTxt: {
+		backgroundColor: lightBlue,
+		borderRadius: 25,
+		padding: 8,
 	},
 	playernumber: {
 		color: black,

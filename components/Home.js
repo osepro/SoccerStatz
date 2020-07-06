@@ -10,20 +10,12 @@ import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
 import HomeScreen from "./HomeScreen";
 import DeletePlayer from "./DeletePlayer";
+import MainStatusBar from "./StatusBar";
 
 function addPlayer({ navigation }) {
 	return (
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
-			<View style={styles.statusBar}>
-				<StatusBar barStyle="light-content" />
-				<View style={styles.homeContainer}>
-					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-						<FontAwesome name='navicon' size={30} color={gray} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				<Text style={styles.initTxt}><UserName /></Text>
-			</View>
+			<MainStatusBar navigation={navigation} />
 			<AddPlayer />
 		</KeyboardAvoidingView>
 	)
@@ -32,16 +24,7 @@ function addPlayer({ navigation }) {
 function viewPlayer({ navigation }) {
 	return (
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
-			<View style={styles.statusBar}>
-				<StatusBar barStyle="light-content" />
-				<View style={styles.homeContainer}>
-					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-						<FontAwesome name='navicon' size={30} color={gray} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				<Text style={styles.initTxt}><UserName /></Text>
-			</View>
+			<MainStatusBar navigation={navigation} />
 			<ViewPlayer />
 		</KeyboardAvoidingView>
 	)
@@ -50,16 +33,7 @@ function viewPlayer({ navigation }) {
 function deletePlayer({ navigation }) {
 	return (
 		<KeyboardAvoidingView behavior="padding" style={styles.container}>
-			<View style={styles.statusBar}>
-				<StatusBar barStyle="light-content" />
-				<View style={styles.homeContainer}>
-					<TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-						<FontAwesome name='navicon' size={30} color={gray} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.homeTitle}>SoccerStaz <FontAwesome name='soccer-ball-o' size={15} color={gray} /></Text>
-				<Text style={styles.initTxt}><UserName /></Text>
-			</View>
+			<MainStatusBar navigation={navigation} />
 			<DeletePlayer />
 		</KeyboardAvoidingView>
 	)
@@ -85,7 +59,6 @@ function MyDrawer(props) {
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />
 			<Drawer.Screen name="Delete Player" component={deletePlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-times' : 'user-times'} size={20} color={black} /> }} />
 			<Drawer.Screen name="Log Out" component={logOut} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'power-off' : 'power-off'} size={20} color={red} /> }} />
-			<Drawer.Screen name="Welcome" component={''} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-o' : 'user-o'} size={20} color={lightBlue} /> }} />
 		</Drawer.Navigator>
 	);
 }
