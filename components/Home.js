@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from "react"
-import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, StatusBar } from "react-native"
+import { View, Text, KeyboardAvoidingView, StyleSheet, Button } from "react-native"
 import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { home } from "../actions/login";
-import UserName from "./UserName";
 import AddPlayer from "./AddPlayer";
 import ViewPlayer from "./ViewPlayer";
 import HomeScreen from "./HomeScreen";
@@ -50,10 +49,11 @@ function logOut({ navigation }) {
 }
 
 const Drawer = createDrawerNavigator();
+const image = '../assets/pitch.png';
 
 function MyDrawer(props) {
 	return (
-		<Drawer.Navigator initialRouteName="Home" drawerType={'slide'}>
+		<Drawer.Navigator initialRouteName="Home" drawerType={'slide'} drawerStyle={{ backgroundColor: lightgray }}>
 			<Drawer.Screen name="Home" component={HomeScreen} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'home' : 'home'} size={20} color={orange} /> }} />
 			<Drawer.Screen name="Add Player" component={addPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'user-plus' : 'user-plus'} size={20} color={green} /> }} />
 			<Drawer.Screen name="View Player" component={viewPlayer} options={{ drawerIcon: config => <FontAwesome name={Platform.OS === 'android' ? 'address-book' : 'address-book'} size={20} color={blue} /> }} />

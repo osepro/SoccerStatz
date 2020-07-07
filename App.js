@@ -28,7 +28,7 @@ const RouteConfigs = {
 	LineUp: {
 		component: LineUp,
 		name: "Line Up",
-		options: { tabBarIcon: ({ color }) => <FontAwesome name='shirtsinbulk' size={20} color={color} />, title: 'Line Up' }
+		options: { tabBarIcon: ({ color }) => <Ionicons name='ios-shirt' size={20} color={color} />, title: 'Line Up' }
 	}
 }
 
