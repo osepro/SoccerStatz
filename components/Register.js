@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
-import { white, orange, green, black, gray, blue } from "../utils/colors";
+import { white, orange, green, black, gray, blue, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { saveUser, getUser } from "../utils/api";
 import { RandomGeneratedNumber } from "../utils/helpers";
@@ -42,14 +42,14 @@ class Register extends Component {
 					players: [],
 				}
 				saveUser(user).then(data => {
-					//if (data) {
-					dispatch(addUser(user.id, user.name, user.password));
-					alert('👍account successfully created');
-					this.props.navigation.navigate('Login');
-					//}
-					//else {
-					//	alert('👎error!! username name already exist');
-					//	}
+					if (data) {
+						dispatch(addUser(user.id, user.name, user.password));
+						alert('👍account successfully created');
+						this.props.navigation.navigate('Login');
+					}
+					else {
+						alert('👎error!! username name already exist');
+					}
 				});
 			}
 		}
@@ -63,7 +63,7 @@ class Register extends Component {
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<View style={styles.row}>
 					<ImageBackground source={require(logo)} style={styles.player} />
-					<Text style={styles.titletext}>SoccerStatz <FontAwesome name='soccer-ball-o' size={30} color={gray} /></Text>
+					<Text style={styles.titletext}>SoccerStatz</Text>
 					<TextInput style={styles.input} placeholder="Enter username" value={username} onChangeText={(text) => this.setLoginData(text, "username")} />
 					<TextInput style={styles.input} placeholder="Enter password" value={password} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "password")} />
 					<TextInput style={styles.input} placeholder="Confirm password" value={cpassword} secureTextEntry={true} onChangeText={(text) => this.setLoginData(text, "cpassword")} />
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	btn: {
-		backgroundColor: blue,
+		backgroundColor: lightBlue,
 		padding: 15,
 		paddingLeft: 80,
 		paddingRight: 80,

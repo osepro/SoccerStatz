@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import UserName from "./UserName";
+import RNPickerSelect from 'react-native-picker-select';
 
 
 class AddGame extends Component {
@@ -19,6 +20,7 @@ class AddGame extends Component {
 		yourteam: '',
 		opponent: '',
 		venue: '',
+		matchfield: '',
 	}
 	updateUser = (gamelocation) => {
 		this.setState({ gamelocation })
@@ -104,6 +106,12 @@ class AddGame extends Component {
 		else alert('😏 compulsory fields empty');
 	}
 
+	setMatchField = (value) => {
+		this.setState({
+			matchfield: value
+		})
+	}
+
 
 	render() {
 		const { yourteam, opponent, venue, show, date, mode } = this.state;
@@ -120,6 +128,17 @@ class AddGame extends Component {
 					<Text style={styles.formText}>Please fill form below to add a new game....</Text>
 					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
 					<TextInput style={styles.input} placeholder="Please enter opponent" value={opponent} onChangeText={(text) => this.setGameData(text, "opponent")} />
+					<View style={styles.input}>
+						<RNPickerSelect
+							onValueChange={(value) => this.setMatchField(value)}
+							items={[
+								{ label: 'Home', value: 'Home' },
+								{ label: 'Away', value: 'Away' },
+							]}
+							style={{ fontSize: 25, fontWeight: "bold" }}
+							placeholder={{ label: "Select home/away game", value: null }}
+						/>
+					</View>
 					<TextInput style={styles.input} placeholder="Please enter match venue" value={venue} onChangeText={(text) => this.setGameData(text, "venue")} />
 					<TouchableOpacity onPress={this.showDatepicker}>
 						<Text style={styles.textLabel}>

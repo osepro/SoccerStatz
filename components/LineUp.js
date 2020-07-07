@@ -50,54 +50,59 @@ class LineUp extends Component {
 					<Text style={styles.homeTitle}>S<FontAwesome name='soccer-ball-o' size={25} color={orange} />ccerStaz</Text>
 					<View style={styles.initTxt}><UserName /></View>
 				</View>
+				<View style={{ flex: 1 }}>
+					<ScrollView style={{ flex: 1 }}>
 
-				<View style={styles.row}>
-					<ImageBackground source={require(image)} style={styles.image}>
-					</ImageBackground>
-				</View>
 
-				<View style={styles.lineup}>
-					<View style={styles.lineupplayers}>
-						<Text style={styles.playerHeader}>Keepers</Text>
-						{
-							keepers.map((goalkeeper, i) => (
-								<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} id={goalkeeper.id} />
-							))
-						}
-					</View>
-					<View style={styles.lineupplayers}>
-						<Text style={styles.playerHeader}>Defenders</Text>
-						{
-							defenders.map((defender, i) => (
-								<DragPlayers key={i} no={defender.no} name={defender.name} id={defender.id} />
-							))
-						}
-					</View>
-					<View style={styles.lineupplayers}>
-						<Text style={styles.playerHeader}>Midfielders</Text>
-						{
-							midfielders.map((midfielder, i) => (
+						<View style={styles.row}>
+							<ImageBackground source={require(image)} style={styles.image}>
+							</ImageBackground>
+						</View>
 
-								<DragPlayers key={i} no={midfielder.no} name={midfielder.name} id={midfielder.id} />
-							))
-						}
-					</View>
-					<View style={styles.lineupplayers}>
-						<Text style={styles.playerHeader}>Winger</Text>
-						{
-							wingers.map((winger, i) => (
-								<DragPlayers key={i} no={winger.no} name={winger.name} id={winger.id} />
-							))
-						}
-					</View>
-					<View style={styles.lineupplayers}>
-						<Text style={styles.playerHeader}>Forward</Text>
-						{
-							forwards.map((forward, i) => (
-								<DragPlayers key={i} no={forward.no} name={forward.name} id={forward.id} />
-							))
-						}
-					</View>
+						<View style={styles.lineup}>
+							<View style={styles.lineupplayers}>
+								<Text style={styles.playerHeader}>Keepers</Text>
+								{
+									keepers.map((goalkeeper, i) => (
+										<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} id={goalkeeper.id} />
+									))
+								}
+							</View>
+							<View style={styles.lineupplayers}>
+								<Text style={styles.playerHeader}>Defenders</Text>
+								{
+									defenders.map((defender, i) => (
+										<DragPlayers key={i} no={defender.no} name={defender.name} id={defender.id} />
+									))
+								}
+							</View>
+							<View style={styles.lineupplayers}>
+								<Text style={styles.playerHeader}>Midfielders</Text>
+								{
+									midfielders.map((midfielder, i) => (
+
+										<DragPlayers key={i} no={midfielder.no} name={midfielder.name} id={midfielder.id} />
+									))
+								}
+							</View>
+							<View style={styles.lineupplayers}>
+								<Text style={styles.playerHeader}>Winger</Text>
+								{
+									wingers.map((winger, i) => (
+										<DragPlayers key={i} no={winger.no} name={winger.name} id={winger.id} />
+									))
+								}
+							</View>
+							<View style={styles.lineupplayers}>
+								<Text style={styles.playerHeader}>Forward</Text>
+								{
+									forwards.map((forward, i) => (
+										<DragPlayers key={i} no={forward.no} name={forward.name} id={forward.id} />
+									))
+								}
+							</View>
+						</View>
+					</ScrollView>
 				</View>
 
 			</View>
@@ -118,6 +123,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginTop: 10,
 		padding: 20,
+		height: 500
 	},
 	lineup: {
 		flex: 0.5,
