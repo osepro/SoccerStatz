@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground } from "react-native"
+import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, ImageBackground, AsyncStorage } from "react-native"
 import { white, orange, gray, blue, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Base64 } from 'js-base64';
@@ -27,6 +27,7 @@ class Login extends Component {
 
 	componentDidMount() {
 		getGame().then(data => console.log('Data loaded successfully'))
+		//AsyncStorage.clear();
 	}
 
 	handleLogin = () => {
