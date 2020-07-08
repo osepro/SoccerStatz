@@ -73,7 +73,7 @@ class AddGame extends Component {
 	}
 
 	handleAddGame = () => {
-		const { yourteam, opponent, venue, date } = this.state;
+		const { yourteam, opponent, venue, date, matchfield } = this.state;
 		const { dispatch, login } = this.props;
 
 		if (yourteam.length > 0 && opponent.length > 0) {
@@ -84,7 +84,8 @@ class AddGame extends Component {
 					gamedate: date,
 					team: yourteam,
 					opponent: opponent,
-					venue: venue
+					venue: venue,
+					matchfield: matchfield,
 				}
 				addGame(login.id, gameDetails).then(value => {
 					if (value) {
@@ -94,6 +95,7 @@ class AddGame extends Component {
 							yourteam: '',
 							opponent: '',
 							venue: '',
+							matchfield: '',
 						})
 						this.props.navigation.navigate('Home');
 					}

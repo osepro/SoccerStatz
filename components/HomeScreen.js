@@ -19,6 +19,7 @@ class HomeScreen extends Component {
 					<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
 					<Text style={styles.gamevenue}>{item.venue}</Text>
 					<Text style={styles.gamevenue}>{item.gametime}</Text>
+					<Text style={styles.gamevenue}>{item.matchfield}</Text>
 				</View>
 			</View>
 		);
@@ -33,7 +34,8 @@ class HomeScreen extends Component {
 			const team = details.team;
 			const opponent = details.opponent;
 			const venue = details.venue;
-			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData, gametime: dateTimeData }] }
+			const matchfield = details.matchfield;
+			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData, gametime: dateTimeData, matchfield: matchfield }] }
 			return gameData;
 		})
 

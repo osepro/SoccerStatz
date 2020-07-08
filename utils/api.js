@@ -110,7 +110,8 @@ export function addGame(userid, game) {
 				gamedate: game.gamedate,
 				team: game.team,
 				opponent: game.opponent,
-				venue: game.venue
+				venue: game.venue,
+				matchfield: game.matchfield,
 			}
 			]
 		};
