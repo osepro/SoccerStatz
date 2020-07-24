@@ -17,35 +17,35 @@ class PlayerInfo extends Component {
 		const datapie = [
 			{
 				name: "Goals",
-				population: playerStats[0].goals,
+				population: 4,
 				color: orange,
 				legendFontColor: "#7F7F7F",
 				legendFontSize: 15
 			},
 			{
 				name: "Assists",
-				population: playerStats[0].assists,
+				population: 3,
 				color: blue,
 				legendFontColor: "#7F7F7F",
 				legendFontSize: 15
 			},
 			{
 				name: "Passes",
-				population: playerStats[0].passes,
+				population: 5,
 				color: lightBlue,
 				legendFontColor: "#7F7F7F",
 				legendFontSize: 15
 			},
 			{
 				name: "Shots",
-				population: playerStats[0].shots,
+				population: 4,
 				color: lightPurp,
 				legendFontColor: "#7F7F7F",
 				legendFontSize: 15
 			},
 			{
 				name: "Free Kicks",
-				population: playerStats[0].freekicks,
+				population: 2,
 				color: green,
 				legendFontColor: "#7F7F7F",
 				legendFontSize: 15
@@ -97,8 +97,8 @@ class PlayerInfo extends Component {
 								<Text style={styles.nameText}> {''}</Text>
 								<Text style={styles.statsdetails}> {playerStats[0].matchesplayes}</Text>
 								<Text style={styles.statsdetails}> {playerStats[0].matchesplayes * 90}</Text>
-								<Text style={styles.statsdetails}> {playerStats[0].goals}</Text>
-								<Text style={styles.statsdetails}> {playerStats[0].assists}</Text>
+								<Text style={styles.statsdetails}> {/*playerStats[0].goals*/}</Text>
+								<Text style={styles.statsdetails}> {/*playerStats[0].assists*/}</Text>
 							</View>
 						</View>
 

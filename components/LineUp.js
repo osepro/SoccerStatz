@@ -36,6 +36,7 @@ class LineUp extends Component {
 					break;
 				case 'Keeper':
 					keepers = [...keepers, { name: player.fullname, no: player.jersey, id: player.id }];
+					break;
 				case 'Winger':
 					wingers = [...wingers, { name: player.fullname, no: player.jersey, id: player.id }];
 					break;
@@ -52,8 +53,6 @@ class LineUp extends Component {
 				</View>
 				<View style={{ flex: 1 }}>
 					<ScrollView style={{ flex: 1 }}>
-
-
 						<View style={styles.row}>
 							<ImageBackground source={require(image)} style={styles.image}>
 							</ImageBackground>
@@ -64,7 +63,7 @@ class LineUp extends Component {
 								<Text style={styles.playerHeader}>Keepers</Text>
 								{
 									keepers.map((goalkeeper, i) => (
-										<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} id={goalkeeper.id} />
+										<DragPlayers key={i} no={goalkeeper.no} name={goalkeeper.name} id={goalkeeper.id} position={'Keeper'} />
 									))
 								}
 							</View>
@@ -72,7 +71,7 @@ class LineUp extends Component {
 								<Text style={styles.playerHeader}>Defenders</Text>
 								{
 									defenders.map((defender, i) => (
-										<DragPlayers key={i} no={defender.no} name={defender.name} id={defender.id} />
+										<DragPlayers key={i} no={defender.no} name={defender.name} id={defender.id} position={'Defender'} />
 									))
 								}
 							</View>
@@ -80,8 +79,7 @@ class LineUp extends Component {
 								<Text style={styles.playerHeader}>Midfielders</Text>
 								{
 									midfielders.map((midfielder, i) => (
-
-										<DragPlayers key={i} no={midfielder.no} name={midfielder.name} id={midfielder.id} />
+										<DragPlayers key={i} no={midfielder.no} name={midfielder.name} id={midfielder.id} position={'Midfielder'} />
 									))
 								}
 							</View>
@@ -89,7 +87,7 @@ class LineUp extends Component {
 								<Text style={styles.playerHeader}>Winger</Text>
 								{
 									wingers.map((winger, i) => (
-										<DragPlayers key={i} no={winger.no} name={winger.name} id={winger.id} />
+										<DragPlayers key={i} no={winger.no} name={winger.name} id={winger.id} position={'Winger'} />
 									))
 								}
 							</View>
@@ -97,7 +95,7 @@ class LineUp extends Component {
 								<Text style={styles.playerHeader}>Forward</Text>
 								{
 									forwards.map((forward, i) => (
-										<DragPlayers key={i} no={forward.no} name={forward.name} id={forward.id} />
+										<DragPlayers key={i} no={forward.no} name={forward.name} id={forward.id} position={'Forward'} />
 									))
 								}
 							</View>
