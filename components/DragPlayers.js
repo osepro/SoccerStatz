@@ -554,7 +554,7 @@ class DragPlayers extends Component {
 }
 
 DragPlayers.propTypes = {
-	no: PropTypes.string,
+	no: PropTypes.number,
 	name: PropTypes.string,
 };
 
