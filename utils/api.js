@@ -55,21 +55,85 @@ export function savePlayerStats(userid, playerid, updatedDetails) {
 	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
 		const user = JSON.parse(users);
 		const player = user[userid].players.filter(player => player.id === playerid);
-		const updatePlayer = {
-			"assists": updatedDetails.assists,
-			"dateofbirth": player[0].dateofbirth,
-			"freekicks": updatedDetails.freekicks,
-			"fullname": player[0].fullname,
-			"goals": updatedDetails.goals,
-			"height": player[0].height,
-			"id": player[0].id,
-			"jersey": player[0].jersey,
-			"matchesplayes": updatedDetails.matchesplayes,
-			"passes": updatedDetails.passes,
-			"position": player[0].position,
-			"shots": updatedDetails.shots,
-			"weight": player[0].weight,
 
+		let updatePlayer = {};
+
+		if (player[0].position === 'Midfielder') {
+			updatePlayer = {
+				"assists": updatedDetails.assists,
+				"dateofbirth": player[0].dateofbirth,
+				"freekicks": updatedDetails.freekicks,
+				"fullname": player[0].fullname,
+				"goals": updatedDetails.goals,
+				"height": player[0].height,
+				"id": player[0].id,
+				"jersey": player[0].jersey,
+				"matchesplayes": updatedDetails.matchesplayes,
+				"longpasses": updatedDetails.longpasses,
+				"longpassescompleted": updatedDetails.longpassescompleted,
+				"shortpasses": updatedDetails.shortpasses,
+				"shortpassescompleted": updatedDetails.shortpassescompleted,
+				"position": player[0].position,
+				"shots": updatedDetails.shots,
+				"weight": player[0].weight,
+			}
+		}
+
+		if (player[0].position === 'Forward' || player[0].position === 'Winger') {
+			updatePlayer = {
+				"assists": updatedDetails.assists,
+				"dateofbirth": player[0].dateofbirth,
+				"fullname": player[0].fullname,
+				"goals": updatedDetails.goals,
+				"height": player[0].height,
+				"id": player[0].id,
+				"jersey": player[0].jersey,
+				"matchesplayes": updatedDetails.matchesplayes,
+				"position": player[0].position,
+				"weight": player[0].weight,
+				"passes": updatedDetails.passes,
+				"passcompleted": updatedDetails.passcompleted,
+				"shots": updatedDetails.shots,
+				"shotontarget": updatedDetails.shotontarget,
+				"dribbles": updatedDetails.dribbles,
+				"dribblescompleted": updatedDetails.dribblescompleted,
+			}
+		}
+
+		if (player[0].position === 'Defender') {
+			updatePlayer = {
+				"fullname": player[0].fullname,
+				"height": player[0].height,
+				"id": player[0].id,
+				"jersey": player[0].jersey,
+				"dateofbirth": player[0].dateofbirth,
+				"position": player[0].position,
+				"weight": player[0].weight,
+				"matchesplayes": updatedDetails.matchesplayes,
+				"goals": updatedDetails.goals,
+				"assists": updatedDetails.assists,
+				"tackles": updatedDetails.tackles,
+				"tackleswon": updatedDetails.tackleswon,
+				"pressure": updatedDetails.pressure,
+				"blocks": updatedDetails.blocks,
+				"cleareance": updatedDetails.cleareance,
+			}
+		}
+
+		if (player[0].position === 'Keeper') {
+			updatePlayer = {
+				"fullname": player[0].fullname,
+				"height": player[0].height,
+				"id": player[0].id,
+				"jersey": player[0].jersey,
+				"dateofbirth": player[0].dateofbirth,
+				"position": player[0].position,
+				"weight": player[0].weight,
+				"matchesplayes": updatedDetails.matchesplayes,
+				"goalagainst": updatedDetails.goalagainst,
+				"shotagainst": updatedDetails.shotagainst,
+				"savesmade": updatedDetails.savesmade,
+			}
 		}
 
 		const newPlayer = user[userid].players.filter(player => player.id !== playerid);
