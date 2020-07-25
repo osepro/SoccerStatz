@@ -284,7 +284,7 @@ class DragPlayers extends Component {
 								<ImageBackground source={require(statzbg)} style={styles.backgroundImage}>
 									{(position === 'Midfielder' || position === 'Defender' || position === 'Forward' || position === 'Winger' || position === 'Keeper') &&
 										(<View>
-											<Text style={styles.modalText}>Matches Played</Text>
+											<Text style={styles.modalText}>Minutes Played</Text>
 											<View style={styles.statsupdate}>
 												<TouchableOpacity style={styles.statsbtn} onPress={() => this.updateStat('subtract', 'matchesplayes')} disabled={matchesplayes === 0 ? true : false}><Text style={styles.statsubstr}>-</Text></TouchableOpacity>
 												<Text style={styles.statsvalue}>{matchesplayes}</Text>
@@ -554,7 +554,7 @@ class DragPlayers extends Component {
 }
 
 DragPlayers.propTypes = {
-	no: PropTypes.number,
+	no: PropTypes.string,
 	name: PropTypes.string,
 };
 
