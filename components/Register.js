@@ -60,7 +60,7 @@ class Register extends Component {
 	render() {
 		const { username, password, cpassword } = this.state;
 		return (
-			<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
 				<View style={styles.row}>
 					<ImageBackground source={require(logo)} style={styles.player} />
 					<Text style={styles.titletext}>SoccerStatz</Text>

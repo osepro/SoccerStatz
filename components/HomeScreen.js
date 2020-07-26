@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react"
-import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, TextInput, Alert } from "react-native"
+import { View, Text, StyleSheet, Button, TouchableOpacity, TextInput, Alert } from "react-native"
 import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue, semilightgray } from "../utils/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ class HomeScreen extends Component {
 	state = {
 		show: false,
 		gamenote: '',
+		opennote: '',
 	}
 
 	setGameNote = (input, note) => {
@@ -62,16 +63,17 @@ class HomeScreen extends Component {
 					<View>
 						<Text style={styles.gamenotetaken}>No Game Note</Text>
 					</View>) : <View />}
-
-
 			</View>
 		)
+	}
+	showAddNote(gameid) {
+		this.setState((prevState) => ({ show: !prevState.show, opennote: gameid }))
 	}
 
 	renderItem(item) {
 		return (
 			<View style={styles.item}>
-				<TouchableOpacity onPress={() => this.setState((prevState) => ({ show: !prevState.show }))}>
+				<TouchableOpacity onPress={() => this.showAddNote(item.gameid)}>
 					<View style={styles.itemDay}><Text style={styles.itemMonthText}>{Moment(item.gamedate).format("MMM")}</Text><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
 					<View style={styles.itemDisplay}>
 						<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
@@ -79,7 +81,7 @@ class HomeScreen extends Component {
 						<Text style={styles.gamevenue}>{item.gametime}</Text>
 						<Text style={styles.gamevenue}>{item.matchfield}</Text>
 					</View>
-					{this.state.show && item.gameid && this.addNote(item.gameid, item.gamedate)}
+					{this.state.opennote === item.gameid && this.state.show && this.addNote(item.gameid, item.gamedate)}
 				</TouchableOpacity>
 			</View>
 		);
