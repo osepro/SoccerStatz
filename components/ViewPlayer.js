@@ -33,7 +33,7 @@ class ViewPlayer extends Component {
 		}
 		return (
 			<Stack.Navigator initialRouteName="PlayerList" {...StackNavigatorConfig}>
-				<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'View Players' }} />
+				<Stack.Screen name="PlayersList" component={PlayerList} options={{ title: 'Players' }} />
 				<Stack.Screen name="PlayerProfile" component={PlayerProfile} />
 			</Stack.Navigator>
 		)
