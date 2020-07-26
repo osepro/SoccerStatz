@@ -36,7 +36,7 @@ class Register extends Component {
 			else {
 				const user = {
 					id: RandomGeneratedNumber(),
-					matches: [{ gamedate: "2020-06-08T04:15:40.611Z", opponent: "Team B", team: "Team A", venue: "Team A groud" }],
+					matches: [{ id: RandomGeneratedNumber(), gamedate: "2020-06-08T04:15:40.611Z", opponent: "Team B", team: "Team A", venue: "Team A groud" }],
 					name: this.state.username,
 					password: Base64.encode(this.state.password.toLocaleLowerCase()),
 					players: [],

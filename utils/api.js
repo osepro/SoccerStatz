@@ -176,8 +176,27 @@ export function addGame(userid, game) {
 				opponent: game.opponent,
 				venue: game.venue,
 				matchfield: game.matchfield,
+				gameid: game.gameid,
+				notes: [],
 			}
 			]
+		};
+		if (AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user))) return true;
+		else return false
+	});
+}
+
+export function addGameNote(userid, gameid, gamenote) {
+	return AsyncStorage.getItem(SOCCERSTAZ_STORAGE_KEY).then(users => {
+		const user = JSON.parse(users);
+		const newMatches = user[userid].matches.filter(match => match.gameid === gameid);
+		const matches = user[userid].matches.filter(match => match.gameid !== gameid);
+		const updateMatch = [...newMatches[0].notes, gamenote]
+		newMatches[0].notes = updateMatch;
+
+		user[userid] = {
+			...user[userid],
+			matches: [...matches, ...newMatches]
 		};
 		if (AsyncStorage.setItem(SOCCERSTAZ_STORAGE_KEY, JSON.stringify(user))) return true;
 		else return false

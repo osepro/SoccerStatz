@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER, UPDATE_PLAYER_STATS } from "../constants";
+import { LOGIN, LOGOUT, ADD_GAME, DEL_PLAYER, HOME, ADD_PLAYER, UPDATE_PLAYER_STATS, GAME_NOTE } from "../constants";
 
 function login(state = {}, action) {
 	switch (action.type) {
@@ -17,6 +17,15 @@ function login(state = {}, action) {
 			return {
 				...state,
 				matches: [...state.matches, action.gamedetails]
+			}
+		case GAME_NOTE:
+			const newMatches = state.matches.filter(match => match.gameid === action.gameid);
+			const matches = state.matches.filter(match => match.gameid !== action.gameid);
+			const updateMatch = [...newMatches[0].notes, action.gamenote]
+			newMatches[0].notes = updateMatch;
+			return {
+				...state,
+				matches: [...matches, ...newMatches]
 			}
 		case ADD_PLAYER:
 			const newPlayers = [...state.players, action.playersdetails];

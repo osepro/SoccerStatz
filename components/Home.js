@@ -49,7 +49,6 @@ function logOut({ navigation }) {
 }
 
 const Drawer = createDrawerNavigator();
-const image = '../assets/pitch.png';
 
 function MyDrawer(props) {
 	return (

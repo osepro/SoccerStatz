@@ -1,26 +1,86 @@
 import React, { Component, Fragment } from "react"
-import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity } from "react-native"
+import { View, Text, KeyboardAvoidingView, StyleSheet, Button, TouchableOpacity, TextInput, Alert } from "react-native"
 import { connect } from "react-redux";
 import { white, orange, lightgray, green, black, gray, blue, red, lightBlue, semilightgray } from "../utils/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Agenda } from "react-native-calendars";
+import { addGameNote } from "../utils/api";
+import { addgamenote } from "../actions/login";
 import MainStatusBar from "./StatusBar";
 import Moment from "moment";
 
 const colorrDay = [white, orange, lightgray, green, black, gray, blue, red, lightBlue];
 
 class HomeScreen extends Component {
+	state = {
+		show: false,
+		gamenote: '',
+	}
+
+	setGameNote = (input, note) => {
+		this.setState({
+			[note]: input
+		})
+	}
+
+
+	handlAddNote(gameid, gamenote) {
+		const { login, dispatch } = this.props;
+		if (gamenote.length > 0) {
+			addGameNote(login.id, gameid, gamenote).then(game => {
+				if (game) {
+					this.setState({ gamenote: '' })
+				}
+			});
+			dispatch(addgamenote(login.id, gameid, gamenote));
+		}
+		else {
+			alert('👎 notes cannot be empty');
+		}
+
+	}
+
+	addNote(gameid, gamedate) {
+		const { login } = this.props;
+		const notes = login.matches.filter(note => note.gameid === gameid);
+		const getDate = Moment(new Date()).format("YYYY-MM-DD");
+		return (
+			<View style={styles.itemAddView}>
+
+				{getDate <= gamedate ? (
+					<View>
+						<Text style={styles.gameavailable}>Add Game Note(s)</Text>
+
+						<TextInput style={styles.input} onChangeText={(text) => this.setGameNote(text, "gamenote")} value={this.state.gamenote} placeholder="Add Note" />
+						<TouchableOpacity onPress={() => this.handlAddNote(gameid, this.state.gamenote)} style={styles.addnotebtn}><Text style={styles.addtxt}>Add</Text></TouchableOpacity>
+					</View>) : (<View><Text style={styles.gameavailable}>Game Note(s)</Text></View>)}
+				{notes[0].notes.length > 0 && notes[0].notes.map((note, i) => (<View key={i} style={styles.noteTaken}>
+					<Text style={styles.gamenotetaken}>{note}</Text>
+				</View>))}
+
+				{notes[0].notes.length === 0 && getDate > gamedate ? (
+					<View>
+						<Text style={styles.gamenotetaken}>No Game Note</Text>
+					</View>) : <View />}
+
+
+			</View>
+		)
+	}
 
 	renderItem(item) {
 		return (
 			<View style={styles.item}>
-				<View style={styles.itemDay}><Text style={styles.itemMonthText}>{Moment(item.gamedate).format("MMM")}</Text><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
-				<View style={styles.itemDisplay}>
-					<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
-					<Text style={styles.gamevenue}>{item.venue}</Text>
-					<Text style={styles.gamevenue}>{item.gametime}</Text>
-					<Text style={styles.gamevenue}>{item.matchfield}</Text>
-				</View>
+				<TouchableOpacity onPress={() => this.setState((prevState) => ({ show: !prevState.show }))}>
+					<View style={styles.itemDay}><Text style={styles.itemMonthText}>{Moment(item.gamedate).format("MMM")}</Text><Text style={styles.itemDayText}>{Moment(item.gamedate).format("DD")}</Text></View>
+					<View style={styles.itemDisplay}>
+						<View style={{ flexDirection: "row" }}><Ionicons name="ios-football" size={20} color={lightBlue} style={styles.soccerball} /><Text style={styles.gameavailable}>{item.name}</Text><Ionicons name='ios-football' size={20} color={lightBlue} style={styles.soccerball} /></View>
+						<Text style={styles.gamevenue}>{item.venue}</Text>
+						<Text style={styles.gamevenue}>{item.gametime}</Text>
+						<Text style={styles.gamevenue}>{item.matchfield}</Text>
+					</View>
+					{this.state.show && item.gameid && this.addNote(item.gameid, item.gamedate)}
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -35,7 +95,8 @@ class HomeScreen extends Component {
 			const opponent = details.opponent;
 			const venue = details.venue;
 			const matchfield = details.matchfield;
-			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData, gametime: dateTimeData, matchfield: matchfield }] }
+			const gameid = details.gameid;
+			const gameData = { [dateData]: [{ name: `${opponent} - ${team}`, venue: venue, gamedate: dateData, gametime: dateTimeData, matchfield: matchfield, gameid: gameid }] }
 			return gameData;
 		})
 
@@ -55,11 +116,6 @@ class HomeScreen extends Component {
 						items={itemDetails}
 						onDayPress={(day) => { return (<View />); }}
 						selected={new Date()}
-						markedDates={{
-							'2020-06-01': { marked: true },
-							'2020-06-14': { marked: true },
-							'2020-06-15': { marked: true }
-						}}
 						renderItem={this.renderItem.bind(this)}
 						renderDay={(day, item) => { return (<View />) }}
 						renderKnob={() => { return (<View />); }}
@@ -169,6 +225,40 @@ const styles = StyleSheet.create({
 			height: 3
 		},
 	},
+	itemAddView: {
+		flex: 1,
+		backgroundColor: white,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 17,
+		justifyContent: "center",
+		alignContent: "center",
+	},
+	noteTaken: {
+		padding: 8,
+		borderStyle: "dotted",
+		borderWidth: 2,
+		borderColor: lightgray,
+		marginBottom: 10,
+	},
+	gamenotetaken: {
+		color: gray,
+		fontSize: 14,
+	},
+	addtxt: {
+		color: white,
+		textAlign: "center",
+		fontWeight: "bold",
+	},
+	addnotebtn: {
+		padding: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
+		backgroundColor: lightBlue,
+		marginTop: 10,
+		marginBottom: 10,
+		borderRadius: Platform.OS === "ios" ? 5 : 2,
+	},
 	itemNoGame: {
 		backgroundColor: white,
 		borderRadius: Platform.OS === "ios" ? 5 : 2,
@@ -184,6 +274,15 @@ const styles = StyleSheet.create({
 			height: 3
 		},
 		padding: 20,
+	},
+	input: {
+		height: 44,
+		padding: 8,
+		borderWidth: 1,
+		borderColor: "#999999",
+		marginTop: 20,
+		justifyContent: "center",
+		borderRadius: 5
 	},
 	register: {
 		alignItems: "center"

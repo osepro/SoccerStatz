@@ -72,7 +72,7 @@ class PlayerInfo extends Component {
 								(<View style={styles.item}>
 									<View style={styles.gamestats}>
 										<Text style={styles.nameText}> {'Stats'}</Text>
-										<Text style={styles.details}> {'Total Matches Played:'}</Text>
+										<Text style={styles.details}> {'Total Minutes Played:'}</Text>
 										<Text style={styles.details}> {'Goals Against:'}</Text>
 										<Text style={styles.details}> {'Saves Made:'}</Text>
 										<Text style={styles.details}> {'Shot Against:'}</Text>
@@ -93,7 +93,7 @@ class PlayerInfo extends Component {
 								(<View style={styles.item}>
 									<View style={styles.gamestats}>
 										<Text style={styles.nameText}> {'Stats'}</Text>
-										<Text style={styles.details}> {'Total Matches Played:'}</Text>
+										<Text style={styles.details}> {'Total Minutes Played:'}</Text>
 										<Text style={styles.details}> {'Goals:'}</Text>
 										<Text style={styles.details}> {'Assists:'}</Text>
 										<Text style={styles.details}> {'Passes:'}</Text>
@@ -124,7 +124,7 @@ class PlayerInfo extends Component {
 								(<View style={styles.item}>
 									<View style={styles.gamestats}>
 										<Text style={styles.nameText}> {'Stats'}</Text>
-										<Text style={styles.details}> {'Total Matches Played:'}</Text>
+										<Text style={styles.details}> {'Total Minutes Played:'}</Text>
 										<Text style={styles.details}> {'Goals:'}</Text>
 										<Text style={styles.details}> {'Assists:'}</Text>
 										<Text style={styles.details}> {'Shots:'}</Text>
@@ -155,7 +155,7 @@ class PlayerInfo extends Component {
 								(<View style={styles.item}>
 									<View style={styles.gamestats}>
 										<Text style={styles.nameText}> {'Stats'}</Text>
-										<Text style={styles.details}> {'Total Matches Played:'}</Text>
+										<Text style={styles.details}> {'Total Minutes Played:'}</Text>
 										<Text style={styles.details}> {'Goals:'}</Text>
 										<Text style={styles.details}> {'Assists:'}</Text>
 										<Text style={styles.details}> {'Tackles:'}</Text>

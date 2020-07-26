@@ -9,6 +9,7 @@ import Moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import UserName from "./UserName";
 import RNPickerSelect from 'react-native-picker-select';
+import { RandomGeneratedNumber } from "../utils/helpers";
 
 
 class AddGame extends Component {
@@ -86,6 +87,8 @@ class AddGame extends Component {
 					opponent: opponent,
 					venue: venue,
 					matchfield: matchfield,
+					gameid: RandomGeneratedNumber(),
+					notes: [],
 				}
 				addGame(login.id, gameDetails).then(value => {
 					if (value) {

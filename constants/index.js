@@ -8,3 +8,4 @@ export const DEL_GAME = "DEL_GAME";
 export const DEL_PLAYER = "DEL_PLAYER";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const UPDATE_PLAYER_STATS = "UPDATE_PLAYER_STATS";
+export const GAME_NOTE = "GAME_NOTE";
