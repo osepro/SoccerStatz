@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, KeyboardAvoidingView } from "react-native"
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, StatusBar, Animated, KeyboardAvoidingView, Keyboard } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { addGame } from "../utils/api";
@@ -11,8 +11,8 @@ import UserName from "./UserName";
 import RNPickerSelect from 'react-native-picker-select';
 import { RandomGeneratedNumber } from "../utils/helpers";
 
-
 class AddGame extends Component {
+
 	state = {
 		gamelocation: '',
 		date: new Date(),
@@ -22,7 +22,26 @@ class AddGame extends Component {
 		opponent: '',
 		venue: '',
 		matchfield: '',
+		showkeyboard: false,
 	}
+
+	componentDidMount() {
+		this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+		this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+	}
+	componentWillUnmount() {
+		this.keyboardWillShowSub.remove();
+		this.keyboardWillHideSub.remove();
+	}
+
+	keyboardWillShow = (event) => {
+		this.setState({ showkeyboard: true })
+	};
+
+	keyboardWillHide = (event) => {
+		this.setState({ showkeyboard: false })
+	};
+
 	updateUser = (gamelocation) => {
 		this.setState({ gamelocation })
 	}
@@ -122,13 +141,13 @@ class AddGame extends Component {
 		const { yourteam, opponent, venue, show, date, mode } = this.state;
 
 		return (
-			<KeyboardAvoidingView behavior="padding" style={styles.container}>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "padding"} keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} style={styles.container}>
 				<View style={styles.statusBar}>
 					<StatusBar barStyle="light-content" />
 					<Text style={styles.homeTitle}>S<FontAwesome name='soccer-ball-o' size={25} color={orange} />ccerStaz</Text>
 					<View style={styles.initTxt}><UserName /></View>
 				</View>
-				<View style={styles.row}>
+				<View style={[styles.row, { justifyContent: this.state.showkeyboard ? "space-around" : "center" }]}>
 					<Text style={styles.formHeader}>Add a new Game</Text>
 					<Text style={styles.formText}>Please fill form below to add a new game....</Text>
 					<TextInput style={styles.input} placeholder="Please enter your team" value={yourteam} onChangeText={(text) => this.setGameData(text, "yourteam")} />
@@ -187,7 +206,6 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flex: 1,
-		justifyContent: "center",
 		paddingLeft: 40,
 		paddingRight: 40,
 	},
@@ -233,7 +251,6 @@ const styles = StyleSheet.create({
 		paddingRight: 80,
 		borderRadius: 5,
 		marginTop: 20,
-		marginBottom: 30,
 	},
 	btnText: {
 		color: "#FFFFFF",
@@ -250,13 +267,6 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		color: gray,
 		marginTop: 20,
-	},
-	register: {
-		alignItems: "center"
-	},
-	registerText: {
-		color: gray,
-		fontSize: 12,
 	},
 	fillbelow: {
 		color: "#FF0000",

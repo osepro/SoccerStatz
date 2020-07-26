@@ -166,7 +166,7 @@ let initData = {
 				"id": 12345653,
 				"fullname": "Degea",
 				"height": "6’5",
-				"jersey": "01",
+				"jersey": 10,
 				"position": "Keeper",
 				"weight": 190,
 				"dateofbirth": "2020-06-26",

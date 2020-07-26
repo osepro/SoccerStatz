@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, StatusBar, Picker } from "react-native"
+import { View, Text, TextInput, KeyboardAvoidingView, StyleSheet, TouchableOpacity, Keyboard } from "react-native"
 import { white, orange, green, black, gray, blue, lightgray, lightBlue } from "../utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { savePlayer } from "../utils/api";
@@ -18,9 +18,10 @@ class AddPlayer extends Component {
 		show: false,
 		fullname: '',
 		position: '',
-		jersey: '',
+		jersey: 0,
 		height: '',
 		weight: '',
+		showkeyboard: false,
 	}
 	updateUser = (gamelocation) => {
 		this.setState({ gamelocation })
@@ -119,13 +120,31 @@ class AddPlayer extends Component {
 		})
 	}
 
+	componentDidMount() {
+		this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+		this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+	}
+	componentWillUnmount() {
+		this.keyboardWillShowSub.remove();
+		this.keyboardWillHideSub.remove();
+	}
+
+	keyboardWillShow = (event) => {
+		this.setState({ showkeyboard: true })
+	};
+
+	keyboardWillHide = (event) => {
+		this.setState({ showkeyboard: false })
+	};
+
+
 
 	render() {
 		const { fullname, jersey, height, weight, show, date } = this.state;
 		const newYear = new Date().getFullYear() - 5;
 		return (
-			<KeyboardAvoidingView behavior="margin" style={styles.container}>
-				<View style={styles.row}>
+			<KeyboardAvoidingView behavior={Platform.OS == "ios" ? "margin" : "padding"} keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} style={styles.container}>
+				<View style={[styles.row, { justifyContent: this.state.showkeyboard ? "space-around" : "center" }]}>
 					<Text style={styles.formHeader}>Add a new player</Text>
 					<Text style={styles.formText}>Please fill form below to add a new Player....</Text>
 					<TextInput style={styles.input} placeholder="enter fullname" value={fullname} onChangeText={(text) => this.setPlayerData(text, "fullname")} />
@@ -183,15 +202,8 @@ const styles = StyleSheet.create({
 	},
 	row: {
 		flex: 1,
-		justifyContent: "center",
 		paddingLeft: 40,
 		paddingRight: 40,
-	},
-	homeTitle: {
-		fontSize: 25,
-		color: orange,
-		textAlign: "center",
-		width: '70%'
 	},
 	formText: {
 		fontSize: 18,
@@ -212,7 +224,7 @@ const styles = StyleSheet.create({
 		paddingRight: 80,
 		borderRadius: 5,
 		marginTop: 20,
-		marginBottom: 50
+		marginBottom: 20,
 	},
 	btnText: {
 		color: "#FFFFFF",
@@ -220,22 +232,10 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontWeight: "bold",
 	},
-	homeContainer: {
-		flexWrap: "wrap",
-		justifyContent: "flex-start",
-		width: '10%'
-	},
 	textLabel: {
 		fontSize: 15,
 		color: gray,
 		marginTop: 20,
-	},
-	register: {
-		alignItems: "center"
-	},
-	registerText: {
-		color: gray,
-		fontSize: 12,
 	},
 	fillbelow: {
 		color: "#FF0000",
@@ -247,14 +247,7 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "#757575",
 		marginTop: 20,
-		justifyContent: "center",
 		borderRadius: 5
-	},
-	btnView: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 20
 	},
 })
 
